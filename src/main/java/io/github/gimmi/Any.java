@@ -1,8 +1,12 @@
 package io.github.gimmi;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,15 +95,16 @@ public class Any {
 		if (index >= 0 && list != null && list.size() > index) {
 			return list.get(index);
 		}
+		// TODO handle negative index python style
 		return new Any();
 	}
 	
 	@Override
 	public String toString() {
 		if (map != null) {
-			return map.toString();
+			return toJson();
 		} else if (list != null) {
-			return list.toString();
+			return toJson();
 		}
 		return stripToEmpty(scalar);
 	}
@@ -125,5 +130,49 @@ public class Any {
 			return !list.isEmpty();
 		}
 		return BooleanUtils.toBoolean(stripToEmpty(scalar));
+	}
+	
+	public String toJson() {
+		StringWriter writer = new StringWriter();
+		toJson(writer);
+		return writer.toString();
+	}
+	
+	public void toJson(Writer w) {
+		try {
+			if (map != null) {
+				w.write('{');
+				for (Map.Entry<String, Any> entry : map.entrySet()) {
+					String value = entry.getValue().toString();
+					if (isNotEmpty(value)) {
+						writeJsonString(entry.getKey(), w);
+						w.write(':');
+						writeJsonString(value, w);
+					}
+				}
+				w.write('}');
+			} else if (list != null) {
+				w.write('[');
+				for (Any entry : list) {
+					// TODO should trim empties at the end
+					String value = entry.toString();
+					writeJsonString(value, w);
+				}
+				w.write(']');
+			} else if (isNotEmpty(scalar)) {
+				writeJsonString(scalar, w);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("Unable to serialize as JSON", e);
+		}
+	}
+	
+	private void writeJsonString(String str, Writer w) throws IOException {
+		w.write('"');
+		for (int i = 0; i < str.length(); i++) {
+			// TODO special chars
+			w.write(str.charAt(i));
+		}
+		w.write('"');
 	}
 }
