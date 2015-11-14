@@ -95,7 +95,6 @@ public class Any {
 		if (index >= 0 && list != null && list.size() > index) {
 			return list.get(index);
 		}
-		// TODO handle negative index python style
 		return new Any();
 	}
 	
@@ -154,7 +153,6 @@ public class Any {
 			} else if (list != null) {
 				w.write('[');
 				for (Any entry : list) {
-					// TODO should trim empties at the end
 					String value = entry.toString();
 					writeJsonString(value, w);
 				}
