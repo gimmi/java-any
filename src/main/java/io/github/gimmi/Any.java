@@ -1,7 +1,7 @@
 package io.github.gimmi;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
 import java.io.IOException;
@@ -9,7 +9,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -18,15 +17,15 @@ import org.apache.commons.lang3.BooleanUtils;
 
 public class Any {
 	public static Any scalar(BigDecimal value) {
-		return new Any(value == null ? null : value.toPlainString());
+		return new Any(value == null ? null : value.toPlainString(), null, null);
 	}
 	
 	public static Any scalar(Boolean value) {
-		return new Any(value == null ? null : value.toString());
+		return new Any(value == null ? null : value.toString(), null, null);
 	}
 	
 	public static Any scalar(String value) {
-		return new Any(value);
+		return new Any(value, null, null);
 	}
 	
 	public static Any map(Consumer<AnyMapBuilder> builder) {
@@ -42,41 +41,22 @@ public class Any {
 	}
 	
 	private final String scalar;
-	private final Map<String, Any> map;
-	private final List<Any> list;
+	private final TreeMap<String, Any> map;
+	private final ArrayList<Any> list;
 	
-	protected Any(String scalar) {
+	protected Any(String scalar, TreeMap<String, Any> map, ArrayList<Any> list) {
 		this.scalar = scalar;
-		this.list = null;
-		this.map = null;
-	}
-	
-	protected Any(List<Any> list) {
-		this.scalar = null;
-		this.list = new ArrayList<>(list);
-		this.map = null;
-	}
-
-	protected Any(Map<String, Any> map) {
-		this.scalar = null;
-		this.list = null;
-		this.map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
-		this.map.putAll(map);
-	}
-
-	protected Any() {
-		this.scalar = null;
-		this.list = null;
-		this.map = null;
+		this.list = list;
+		this.map = map;
 	}
 	
 	public int cardinality() {
-		if (scalar != null) {
-			return 1;
-		} else if (map != null) {
+		if (map != null) {
 			return map.size();
 		} else if (list != null) {
 			return list.size();
+		} else if(isNotBlank(scalar)) {
+			return 1;
 		}
 		return 0;
 	}
@@ -88,14 +68,14 @@ public class Any {
 				return val;
 			}
 		}
-		return new Any();
+		return new Any(null, null, null);
 	}
 	
 	public Any get(int index) {
 		if (index >= 0 && list != null && list.size() > index) {
 			return list.get(index);
 		}
-		return new Any();
+		return new Any(null, null, null);
 	}
 	
 	@Override
@@ -140,24 +120,26 @@ public class Any {
 	public void toJson(Writer w) {
 		try {
 			if (map != null) {
+				String comma = "";
 				w.write('{');
 				for (Map.Entry<String, Any> entry : map.entrySet()) {
-					String value = entry.getValue().toString();
-					if (isNotEmpty(value)) {
-						writeJsonString(entry.getKey(), w);
-						w.write(':');
-						writeJsonString(value, w);
-					}
+					w.write(comma);
+					comma = ",";
+					writeJsonString(entry.getKey(), w);
+					w.write(':');
+					entry.getValue().toJson(w);
 				}
 				w.write('}');
 			} else if (list != null) {
+				String comma = "";
 				w.write('[');
 				for (Any entry : list) {
-					String value = entry.toString();
-					writeJsonString(value, w);
+					w.write(comma);
+					comma = ",";
+					entry.toJson(w);
 				}
 				w.write(']');
-			} else if (isNotEmpty(scalar)) {
+			} else {
 				writeJsonString(scalar, w);
 			}
 		} catch (IOException e) {
@@ -166,6 +148,7 @@ public class Any {
 	}
 	
 	private void writeJsonString(String str, Writer w) throws IOException {
+		str = stripToEmpty(str);
 		w.write('"');
 		for (int i = 0; i < str.length(); i++) {
 			// TODO special chars

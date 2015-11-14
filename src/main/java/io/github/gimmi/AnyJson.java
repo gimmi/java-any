@@ -51,7 +51,7 @@ public class AnyJson {
 			    return listb.build();
 			} else if (ch == 'n') {
 				readExpected(reader, "null");
-			    return new Any();
+			    return Any.scalar("");
 			} else if (ch == 't') {
 				readExpected(reader, "true");
 				return Any.scalar(true);
