@@ -43,7 +43,7 @@ public class AnyJsonTest {
             "}"
         ).replace('\'', '"');
 		
-		Any any = AnyJson.parse(json);
+		Any any = AnyJson.fromJson(json);
 		
         assertThat(any.cardinality()).isEqualTo(9);
         assertThat(any.get("strProp").toString()).isEqualTo("val");
@@ -74,7 +74,7 @@ public class AnyJsonTest {
 	
 	@Test
 	public void should_serialize_complex_obj() {
-		String json = Any.map(b -> {
+		String json = AnyJson.toJson(Any.map(b -> {
 			b.put("strProp", Any.scalar("val"));
 			b.put("numProp", Any.scalar(new BigDecimal("-3.14e2")));
 			b.put("trueProp", Any.scalar(true));
@@ -100,7 +100,7 @@ public class AnyJsonTest {
 				bb.put("emptyAry", Any.list(bbb -> {}));
 				bb.put("emptyObj", Any.map(bbb -> {}));
 			}));
-		}).toJson().replace('"', '\'');
+		})).replace('"', '\'');
 		
 		assertThat(json).isEqualTo("{'aryProp':['val','-314','true','false','',[],{}],'emptyAry':[],'emptyObj':{},'falseProp':'false','nullProp':'','numProp':'-314','objProp':{'emptyAry':[],'emptyObj':{},'falseProp':'false','nullProp':'','numProp':'-314','strProp':'val','trueProp':'true'},'strProp':'val','trueProp':'true'}");
 	}

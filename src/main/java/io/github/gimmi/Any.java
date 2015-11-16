@@ -4,12 +4,11 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 
-import java.io.IOException;
-import java.io.StringWriter;
-import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Map;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
@@ -81,9 +80,9 @@ public class Any {
 	@Override
 	public String toString() {
 		if (map != null) {
-			return toJson();
+			return map.toString();
 		} else if (list != null) {
-			return toJson();
+			return list.toString();
 		}
 		return stripToEmpty(scalar);
 	}
@@ -111,49 +110,21 @@ public class Any {
 		return BooleanUtils.toBoolean(stripToEmpty(scalar));
 	}
 	
-	public String toJson() {
-		StringWriter writer = new StringWriter();
-		toJson(writer);
-		return writer.toString();
-	}
-	
-	public void toJson(Writer w) {
-		try {
-			if (map != null) {
-				String comma = "";
-				w.write('{');
-				for (Map.Entry<String, Any> entry : map.entrySet()) {
-					w.write(comma);
-					comma = ",";
-					writeJsonString(entry.getKey(), w);
-					w.write(':');
-					entry.getValue().toJson(w);
-				}
-				w.write('}');
-			} else if (list != null) {
-				String comma = "";
-				w.write('[');
-				for (Any entry : list) {
-					w.write(comma);
-					comma = ",";
-					entry.toJson(w);
-				}
-				w.write(']');
-			} else {
-				writeJsonString(scalar, w);
-			}
-		} catch (IOException e) {
-			throw new RuntimeException("Unable to serialize as JSON", e);
+	public Set<String> keys() {
+		if (map != null) {
+			return  map.keySet();
 		}
+		return Collections.emptySet();
 	}
-	
-	private void writeJsonString(String str, Writer w) throws IOException {
-		str = stripToEmpty(str);
-		w.write('"');
-		for (int i = 0; i < str.length(); i++) {
-			// TODO special chars
-			w.write(str.charAt(i));
+
+	public Iterable<Any> values() {
+		if (map != null) {
+			return  map.values();
+		} else if (list != null) {
+			return list;
+		} else if (isNotBlank(scalar)) {
+			return Arrays.asList(this);
 		}
-		w.write('"');
+		return new ArrayList<Any>(0);
 	}
 }
