@@ -1,6 +1,7 @@
 package io.github.gimmi;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 import static org.apache.commons.lang3.StringUtils.stripToNull;
 
@@ -14,6 +15,8 @@ import java.util.function.Consumer;
 import org.apache.commons.lang3.BooleanUtils;
 
 public class Any {
+	public static Any NULL = new Any(null, null, null);
+	
 	public static Any scalar(BigDecimal value) {
 		return new Any(value == null ? null : value.toPlainString(), null, null);
 	}
@@ -53,8 +56,10 @@ public class Any {
 			return map.size();
 		} else if (list != null) {
 			return list.size();
+		} else if (isNotBlank(scalar)) {
+			return 1;
 		}
-		return 1;
+		return 0;
 	}
 	
 	public Any get(String key) {

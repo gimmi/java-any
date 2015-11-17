@@ -43,20 +43,20 @@ public class AnyTest {
 	}
 	
 	@Test
-	public void should_handle_empty_lists() {
+	public void should_handle_empty_lists_like_null_objects() {
 		Any list = Any.list(l -> {});
-		assertThat(list.cardinality()).isZero();
-		assertThat(list.values()).isEmpty();
-		assertThat(list.keys()).isEmpty();
-		assertThat(list.toString()).isEmpty();
-		assertThat(list.toBoolean()).isFalse();
-		assertThat(list.toBigDecimal()).isEqualByComparingTo(BigDecimal.ZERO);
-		assertThat(list.get(-1).toString()).isEmpty();
-		assertThat(list.get(0).toString()).isEmpty();
-		assertThat(list.get(1).toString()).isEmpty();
-		assertThat(list.get(2).toString()).isEmpty();
-		assertThat(list.get(100).toString()).isEmpty();
-	}
+		Any nil = Any.NULL;
+		assertThat(list.cardinality()).isEqualTo(nil.cardinality());
+		assertThat(list.values()).containsExactlyElementsOf(nil.values());
+		assertThat(list.keys()).containsExactlyElementsOf(nil.keys());
+		assertThat(list.toString()).isEqualTo(nil.toString());
+		assertThat(list.toBoolean()).isEqualTo(nil.toBoolean());
+		assertThat(list.toBigDecimal()).isEqualTo(nil.toBigDecimal());
+		assertThat(list.get("x").toString()).isEqualTo(nil.get("x").toString());
+		assertThat(list.get((String)null).toString()).isEqualTo(nil.get((String)null).toString());
+		assertThat(list.get("  ").toString()).isEqualTo(nil.get("  ").toString());
+		assertThat(list.get(0).toString()).isEqualTo(nil.get(0).toString());
+}
 	
 	@Test
 	public void should_handle_lists_containing_values() {
@@ -80,18 +80,19 @@ public class AnyTest {
 	}
 	
 	@Test
-	public void should_handle_empty_maps() {
+	public void should_handle_empty_maps_like_null_objects() {
 		Any map = Any.map(x -> {});
-		assertThat(map.cardinality()).isZero();
-		assertThat(map.values()).isEmpty();
-		assertThat(map.keys()).isEmpty();
-		assertThat(map.toString()).isEmpty();
-		assertThat(map.toBoolean()).isFalse();
-		assertThat(map.toBigDecimal()).isEqualByComparingTo(BigDecimal.ZERO);
-		assertThat(map.get("x").toString()).isEmpty();
-		assertThat(map.get((String)null).toString()).isEmpty();
-		assertThat(map.get("  ").toString()).isEmpty();
-		assertThat(map.get(0).toString()).isEmpty();
+		Any nil = Any.NULL;
+		assertThat(map.cardinality()).isEqualTo(nil.cardinality());
+		assertThat(map.values()).containsExactlyElementsOf(nil.values());
+		assertThat(map.keys()).containsExactlyElementsOf(nil.keys());
+		assertThat(map.toString()).isEqualTo(nil.toString());
+		assertThat(map.toBoolean()).isEqualTo(nil.toBoolean());
+		assertThat(map.toBigDecimal()).isEqualTo(nil.toBigDecimal());
+		assertThat(map.get("x").toString()).isEqualTo(nil.get("x").toString());
+		assertThat(map.get((String)null).toString()).isEqualTo(nil.get((String)null).toString());
+		assertThat(map.get("  ").toString()).isEqualTo(nil.get("  ").toString());
+		assertThat(map.get(0).toString()).isEqualTo(nil.get(0).toString());
 	}
 	
 	@Test
