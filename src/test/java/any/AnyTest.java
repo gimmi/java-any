@@ -60,10 +60,10 @@ public class AnyTest {
 	
 	@Test
 	public void should_handle_lists_containing_values() {
-		Any list = Any.list(l -> l
-			.put(Any.scalar("1"))
-			.put(Any.scalar("2"))
-		);
+		Any list = Any.list(l -> {
+			l.put(Any.scalar("1"));
+			l.put(Any.scalar("2"));
+		});
 		
 		assertThat(list.cardinality()).isEqualTo(2);
 		assertThat(list.values()).extracting(x -> x.toString()).containsExactly("1", "2");
@@ -76,25 +76,52 @@ public class AnyTest {
 		assertThat(list.get(1).toString()).isEqualTo("2");
 		assertThat(list.get(2).toString()).isEmpty();
 		assertThat(list.get(100).toString()).isEmpty();
+		assertThat(list.get("x").toString()).isEmpty();
 	}
 	
 	@Test
-	public void should_handle_maps() {
-		assertThat(Any.map(x -> {}).cardinality()).isEqualTo(0);
-		
-		assertThat(Any.map(x -> {
+	public void should_handle_empty_maps() {
+		Any map = Any.map(x -> {});
+		assertThat(map.cardinality()).isZero();
+		assertThat(map.values()).isEmpty();
+		assertThat(map.keys()).isEmpty();
+		assertThat(map.toString()).isEmpty();
+		assertThat(map.toBoolean()).isFalse();
+		assertThat(map.toBigDecimal()).isEqualByComparingTo(BigDecimal.ZERO);
+		assertThat(map.get("x").toString()).isEmpty();
+		assertThat(map.get((String)null).toString()).isEmpty();
+		assertThat(map.get("  ").toString()).isEmpty();
+		assertThat(map.get(0).toString()).isEmpty();
+	}
+	
+	@Test
+	public void should_handle_map_containing_values() {
+		Any map = Any.map(x -> {
 			x.put("k1", Any.scalar("1"));
-			x.put("k2", Any.scalar("2"));
-		}).toString()).isEmpty();
-
-		assertThat(Any.map(x -> x
-			.put("k1", Any.scalar("1"))
-			.put("k2", Any.scalar("2"))
-		).cardinality()).isEqualTo(2);
+			x.put("CAPITAL", Any.scalar("2"));
+			x.put(" k3 ", Any.scalar("3"));
+		});
+		assertThat(map.cardinality()).isEqualTo(3);
+		assertThat(map.values()).extracting(x -> x.toString()).containsExactly("2", "1", "3");
+		assertThat(map.keys()).containsExactly("CAPITAL", "k1", "k3");
+		assertThat(map.toString()).isEmpty();
+		assertThat(map.toBoolean()).isTrue();
+		assertThat(map.toBigDecimal()).isEqualByComparingTo(BigDecimal.ZERO);
+		assertThat(map.get("x").toString()).isEmpty();
+		assertThat(map.get((String)null).toString()).isEmpty();
+		assertThat(map.get("  ").toString()).isEmpty();
+		assertThat(map.get(0).toString()).isEmpty();
+		assertThat(map.get("  k1  ").toString()).isEqualTo("1");
+		assertThat(map.get("  capital  ").toString()).isEqualTo("2");
 	}
 	
 	@Test
 	public void empty_array_should_behave_like_null_value() {
+		fail();
+	}
+	
+	@Test
+	public void should_treat_zero_as_false() {
 		fail();
 	}
 }
