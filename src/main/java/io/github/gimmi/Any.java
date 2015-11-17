@@ -1,12 +1,11 @@
 package io.github.gimmi;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
+import static org.apache.commons.lang3.StringUtils.stripToNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Set;
 import java.util.TreeMap;
@@ -54,14 +53,13 @@ public class Any {
 			return map.size();
 		} else if (list != null) {
 			return list.size();
-		} else if(isNotBlank(scalar)) {
-			return 1;
 		}
-		return 0;
+		return 1;
 	}
 	
 	public Any get(String key) {
-		if (map != null) {
+		key = stripToNull(key);
+		if (map != null && key != null) {
 			Any val = map.get(key);
 			if (val != null) {
 				return val;
@@ -70,8 +68,8 @@ public class Any {
 		return new Any(null, null, null);
 	}
 	
-	public Any get(int index) {
-		if (index >= 0 && list != null && list.size() > index) {
+	public Any get(Integer index) {
+		if (list != null && index != null && index >= 0 && index < list.size()) {
 			return list.get(index);
 		}
 		return new Any(null, null, null);
@@ -80,9 +78,9 @@ public class Any {
 	@Override
 	public String toString() {
 		if (map != null) {
-			return map.toString();
+			return "";
 		} else if (list != null) {
-			return list.toString();
+			return "";
 		}
 		return stripToEmpty(scalar);
 	}
@@ -91,10 +89,7 @@ public class Any {
 		if (map != null) {
 			return BigDecimal.ZERO;
 		} else if (list != null) {
-			if (list.isEmpty()) {
-				return BigDecimal.ZERO;
-			}
-			return list.get(0).toBigDecimal();
+			return BigDecimal.ZERO;
 		} else if (isBlank(scalar)) {
 			return BigDecimal.ZERO;
 		}
@@ -122,9 +117,7 @@ public class Any {
 			return  map.values();
 		} else if (list != null) {
 			return list;
-		} else if (isNotBlank(scalar)) {
-			return Arrays.asList(this);
 		}
-		return new ArrayList<Any>(0);
+		return Collections.emptyList();
 	}
 }
