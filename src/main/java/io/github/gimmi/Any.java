@@ -1,14 +1,12 @@
 package io.github.gimmi;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.stripToEmpty;
 import static org.apache.commons.lang3.StringUtils.stripToNull;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
@@ -51,13 +49,11 @@ public class Any {
 		this.map = map;
 	}
 	
-	public int cardinality() {
+	public int size() {
 		if (map != null) {
 			return map.size();
 		} else if (list != null) {
 			return list.size();
-		} else if (isNotBlank(scalar)) {
-			return 1;
 		}
 		return 0;
 	}
@@ -70,14 +66,14 @@ public class Any {
 				return val;
 			}
 		}
-		return new Any(null, null, null);
+		return Any.NULL;
 	}
 	
 	public Any get(Integer index) {
 		if (list != null && index != null && index >= 0 && index < list.size()) {
 			return list.get(index);
 		}
-		return new Any(null, null, null);
+		return Any.NULL;
 	}
 	
 	@Override
@@ -103,14 +99,14 @@ public class Any {
 	
 	public boolean toBoolean() {
 		if (map != null) {
-			return !map.isEmpty();
+			return false;
 		} else if (list != null) {
-			return !list.isEmpty();
+			return false;
 		}
 		return BooleanUtils.toBoolean(stripToEmpty(scalar));
 	}
 	
-	public Set<String> keys() {
+	public Iterable<String> keys() {
 		if (map != null) {
 			return  map.keySet();
 		}

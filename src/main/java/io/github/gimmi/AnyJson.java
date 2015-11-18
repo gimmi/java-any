@@ -9,6 +9,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
+import java.util.Iterator;
 
 public class AnyJson {
 	public static Any fromJson(String str) {
@@ -91,9 +92,12 @@ public class AnyJson {
 	public static void toJson(Any any, Writer w) {
 		try {
 			String comma = "";
-			if (!any.keys().isEmpty()) {
+			Iterator<String> keys = any.keys().iterator();
+			Iterator<Any> values = any.values().iterator();
+			if (keys.hasNext()) {
 				w.write('{');
-				for (String key : any.keys()) {
+				while (keys.hasNext()) {
+					String key = keys.next();
 					write(w, comma);
 					comma = ",";
 					writeJsonString(key, w);
@@ -101,18 +105,17 @@ public class AnyJson {
 					toJson(any.get(key), w);
 				}
 				w.write('}');
-			} else if (any.cardinality() > 1) {
+			} else if (values.hasNext()) {
 				w.write('[');
-				for (Any child : any.values()) {
+				while (values.hasNext()) {
+					Any value = values.next();
 					write(w, comma);
 					comma = ",";
-					toJson(child, w);
+					toJson(value, w);
 				}
 				w.write(']');
-			} else if (any.cardinality() > 0) {
-				writeJsonString(any.toString(), w);
 			} else {
-				w.write("null"); // TODO this is a workaround
+				writeJsonString(any.toString(), w);
 			}
 		} catch (RuntimeException e) {
 			throw e;

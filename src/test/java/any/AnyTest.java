@@ -1,13 +1,13 @@
 package any;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.StrictAssertions.assertThat;
 
 import java.math.BigDecimal;
 
 import org.junit.Test;
 
 import io.github.gimmi.Any;
-import static org.junit.Assert.*;
 
 public class AnyTest {
 	@Test
@@ -46,7 +46,7 @@ public class AnyTest {
 	public void should_handle_empty_lists_like_null_objects() {
 		Any list = Any.list(l -> {});
 		Any nil = Any.NULL;
-		assertThat(list.cardinality()).isEqualTo(nil.cardinality());
+		assertThat(list.size()).isEqualTo(nil.size());
 		assertThat(list.values()).containsExactlyElementsOf(nil.values());
 		assertThat(list.keys()).containsExactlyElementsOf(nil.keys());
 		assertThat(list.toString()).isEqualTo(nil.toString());
@@ -65,11 +65,11 @@ public class AnyTest {
 			l.put(Any.scalar("2"));
 		});
 		
-		assertThat(list.cardinality()).isEqualTo(2);
+		assertThat(list.size()).isEqualTo(2);
 		assertThat(list.values()).extracting(x -> x.toString()).containsExactly("1", "2");
 		assertThat(list.keys()).isEmpty();
 		assertThat(list.toString()).isEmpty();
-		assertThat(list.toBoolean()).isTrue();
+		assertThat(list.toBoolean()).isFalse();
 		assertThat(list.toBigDecimal()).isEqualByComparingTo(BigDecimal.ZERO);
 		assertThat(list.get(-1).toString()).isEmpty();
 		assertThat(list.get(0).toString()).isEqualTo("1");
@@ -83,7 +83,7 @@ public class AnyTest {
 	public void should_handle_empty_maps_like_null_objects() {
 		Any map = Any.map(x -> {});
 		Any nil = Any.NULL;
-		assertThat(map.cardinality()).isEqualTo(nil.cardinality());
+		assertThat(map.size()).isEqualTo(nil.size());
 		assertThat(map.values()).containsExactlyElementsOf(nil.values());
 		assertThat(map.keys()).containsExactlyElementsOf(nil.keys());
 		assertThat(map.toString()).isEqualTo(nil.toString());
@@ -102,11 +102,11 @@ public class AnyTest {
 			x.put("CAPITAL", Any.scalar("2"));
 			x.put(" k3 ", Any.scalar("3"));
 		});
-		assertThat(map.cardinality()).isEqualTo(3);
+		assertThat(map.size()).isEqualTo(3);
 		assertThat(map.values()).extracting(x -> x.toString()).containsExactly("2", "1", "3");
 		assertThat(map.keys()).containsExactly("CAPITAL", "k1", "k3");
 		assertThat(map.toString()).isEmpty();
-		assertThat(map.toBoolean()).isTrue();
+		assertThat(map.toBoolean()).isFalse();
 		assertThat(map.toBigDecimal()).isEqualByComparingTo(BigDecimal.ZERO);
 		assertThat(map.get("x").toString()).isEmpty();
 		assertThat(map.get((String)null).toString()).isEmpty();
@@ -114,15 +114,5 @@ public class AnyTest {
 		assertThat(map.get(0).toString()).isEmpty();
 		assertThat(map.get("  k1  ").toString()).isEqualTo("1");
 		assertThat(map.get("  capital  ").toString()).isEqualTo("2");
-	}
-	
-	@Test
-	public void empty_array_should_behave_like_null_value() {
-		fail();
-	}
-	
-	@Test
-	public void should_treat_zero_as_false() {
-		fail();
 	}
 }
