@@ -148,4 +148,20 @@ public class AnyTest {
         assertThat(any.size()).isZero();
         assertThat(any.get("k").toString()).isEmpty();
     }
+
+    @Test
+    public void should_skip_trailing_nulls_from_list() {
+        Any any = Any.list(b -> {
+            b.put(Any.NULL);
+            b.put(Any.NULL);
+            b.put(Any.scalar("val"));
+            b.put(Any.NULL);
+            b.put(Any.NULL);
+        });
+
+        assertThat(any.size()).isEqualTo(3);
+        assertThat(any.get(0).size()).isZero();
+        assertThat(any.get(1).size()).isZero();
+        assertThat(any.get(2).toString()).isEqualTo("val");
+    }
 }

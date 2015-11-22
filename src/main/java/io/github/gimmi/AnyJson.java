@@ -75,10 +75,10 @@ public class AnyJson {
 			        }
 			        ch = (char) peek;
 			    }
-			    return Any.scalar(new BigDecimal(sb.toString()));
+			    return Any.scalar(sb.toString());
 			}
 			throw new RuntimeException("Unexpected char '" + ch + "'");
-		} catch (Exception e) {
+		} catch (IOException e) {
 			throw new RuntimeException("Error parsing JSON", e);
 		}
     }
@@ -117,8 +117,6 @@ public class AnyJson {
 			} else {
 				writeJsonString(any.toString(), w);
 			}
-		} catch (RuntimeException e) {
-			throw e;
 		} catch (IOException e) {
 			throw new RuntimeException("Unable to serialize as JSON", e);
 		}
