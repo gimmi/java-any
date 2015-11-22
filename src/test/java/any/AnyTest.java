@@ -137,4 +137,15 @@ public class AnyTest {
         assertThat(map.get("2").toString()).isEmpty();
         assertThat(map.get("not a number").toString()).isEmpty();
     }
+
+    @Test
+    public void should_skip_nulls_in_maps() {
+        Any any = Any.map(b -> {
+            b.put("k", Any.scalar("val"));
+            b.put("k", Any.NULL);
+        });
+
+        assertThat(any.size()).isZero();
+        assertThat(any.get("k").toString()).isEmpty();
+    }
 }

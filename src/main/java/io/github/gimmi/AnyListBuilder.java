@@ -7,13 +7,16 @@ public class AnyListBuilder {
 	
 	public AnyListBuilder put(Any value) {
 		if (value == null) {
-			value = new Any(null, null, null);
+			value = Any.NULL;
 		}
 		list.add(value);
 		return this;
 	}
 	
 	public Any build() {
+		if (list.isEmpty()) {
+			return Any.NULL;
+		}
 		return new Any(null, null, new ArrayList<>(list));
 	}
 }

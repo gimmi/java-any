@@ -56,7 +56,7 @@ public class AnyJson {
 			    return listb.build();
 			} else if (ch == 'n') {
 				readExpected(reader, "null");
-			    return Any.scalar("");
+			    return Any.NULL;
 			} else if (ch == 't') {
 				readExpected(reader, "true");
 				return Any.scalar(true);
@@ -64,7 +64,7 @@ public class AnyJson {
 				readExpected(reader, "false");
 				return Any.scalar(false);
 			} else if (ch == '"') {
-			    return Any.scalar(parseString(reader));
+				return Any.scalar(parseString(reader));
 			} else if (ch == '-' || Character.isDigit(ch)) {
 				StringBuilder sb = new StringBuilder();
 				while (ch == '+' || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || Character.isDigit(ch)) {
