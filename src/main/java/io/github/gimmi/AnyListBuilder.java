@@ -4,23 +4,25 @@ import java.util.ArrayList;
 
 public class AnyListBuilder {
 	private final ArrayList<Any> list = new ArrayList<>();
-	private int lastNonNullIndex = 0;
+	private int lastNonNullIndex = -1;
 	
 	public AnyListBuilder put(Any value) {
 		if (value == null) {
 			value = Any.NULL;
 		}
-		list.add(value);
 		if (value.size() > 0) {
 			lastNonNullIndex = list.size();
 		}
+		list.add(value);
 		return this;
 	}
 	
 	public Any build() {
-		if (list.isEmpty()) {
+		if (lastNonNullIndex < 0) {
 			return Any.NULL;
+		} else if (lastNonNullIndex == 0) {
+			return list.get(0);
 		}
-		return new Any(null, null, new ArrayList<>(list.subList(0, lastNonNullIndex)));
+		return new Any(null, null, new ArrayList<>(list.subList(0, lastNonNullIndex + 1)));
 	}
 }
