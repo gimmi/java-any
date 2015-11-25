@@ -22,10 +22,11 @@ public class AnyXml {
 	public static Any fromXml(Reader reader) {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
+			factory.setNamespaceAware(true);
 			SAXParser saxParser = factory.newSAXParser();
 			Handler handler = new Handler();
 			saxParser.parse(new InputSource(reader), handler);
-			return handler.elements.pop().build();
+			return handler.any;
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			throw new RuntimeException("Erro parsing XML", e);
 		}
@@ -33,6 +34,8 @@ public class AnyXml {
 
 	private static class Handler extends DefaultHandler {
 		private final Stack<AnyMapBuilder> elements = new Stack<>();
+		private final StringBuilder sb = new StringBuilder();
+		private Any any;
 
 		@Override
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -44,9 +47,21 @@ public class AnyXml {
 		}
 
 		@Override
+		public void characters(char[] ch, int start, int length) throws SAXException {
+			sb.append(ch, start, length);
+		}
+
+		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
-			if (elements.size() > 1) {
-				elements.peek().put(localName, elements.pop().build());
+			AnyMapBuilder builder = elements.pop();
+			any = Any.scalar(sb.toString());
+			sb.setLength(0);
+			if (builder.length() > 0) {
+				any = builder.put("text", any).build();
+			}
+
+			if (!elements.empty()) {
+				elements.peek().put(localName, any);
 			}
 		}
 	}

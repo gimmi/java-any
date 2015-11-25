@@ -16,6 +16,10 @@ public class AnyListBuilder {
 		list.add(value);
 		return this;
 	}
+
+	public int length() {
+		return lastNonNullIndex + 1;
+	}
 	
 	public Any build() {
 		if (lastNonNullIndex < 0) {
