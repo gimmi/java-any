@@ -1,14 +1,12 @@
 package io.github.gimmi;
 
-import org.apache.commons.lang3.BooleanUtils;
-
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import static org.apache.commons.lang3.StringUtils.stripToNull;
+import static io.github.gimmi.Utils.stripToNull;
 
 public class Any {
     public static Any NULL = new Any(null, null, null);
@@ -111,7 +109,7 @@ public class Any {
     }
 
     public boolean toBoolean() {
-        return BooleanUtils.toBoolean(getScalar("false"));
+        return Utils.toBoolean(getScalar("false"));
     }
 
     public Iterable<String> keys() {

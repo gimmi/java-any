@@ -1,7 +1,5 @@
 package io.github.gimmi;
 
-import static org.apache.commons.lang3.StringUtils.stripToEmpty;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -10,6 +8,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.math.BigDecimal;
 import java.util.Iterator;
+
+import static io.github.gimmi.Utils.stripToEmpty;
 
 public class AnyJson {
 	public static Any fromJson(String str) {

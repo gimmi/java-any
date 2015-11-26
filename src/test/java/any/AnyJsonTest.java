@@ -6,13 +6,12 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.apache.commons.lang3.StringUtils.join;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnyJsonTest {
 	@Test
 	public void should_parse_complex_json() {
-		String json = join(
+		String json = String.join("",
 			"{",
 			"    'strProp': 'val',",
 			"    'numProp': -3.14e2,",

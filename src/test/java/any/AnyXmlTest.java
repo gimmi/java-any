@@ -7,13 +7,12 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 
-import static org.apache.commons.lang3.StringUtils.join;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnyXmlTest {
 	@Test
 	public void should_deserialize_xml() {
-		String xml = join(
+		String xml = String.join("",
 			"<Root>",
 			"  <StrProp>val</StrProp>",
 			"  <NumProp>-3.14e2</NumProp>",
@@ -59,7 +58,7 @@ public class AnyXmlTest {
 
 	@Test
 	public void should_support_namespaces() {
-		String xml = join(
+		String xml = String.join("",
 			"<Root xmlns='urn:ns1' xmlns:ns2='urn:ns2'>",
 			"  <StrProp>val</StrProp>",
 			"  <ns2:ObjProp>",
@@ -76,7 +75,7 @@ public class AnyXmlTest {
 
 	@Test
 	public void should_keep_attribute_and_text() {
-		String xml = join(
+		String xml = String.join("",
 			"<Root attr1='val1' attr2='val2'>val3</Root>"
 		).replace('\'', '"');
 

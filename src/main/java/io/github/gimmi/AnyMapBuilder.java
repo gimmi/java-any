@@ -3,13 +3,13 @@ package io.github.gimmi;
 import java.util.Map;
 import java.util.TreeMap;
 
-import static org.apache.commons.lang3.StringUtils.stripToNull;
+import static io.github.gimmi.Utils.stripToEmpty;
 
 public class AnyMapBuilder {
 	private final TreeMap<String, AnyListBuilder> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
 	public AnyMapBuilder put(String key, Any value) {
-		key = stripToNull(key);
+		key = stripToEmpty(key);
 		if (key != null) {
 			map.computeIfAbsent(key, k -> new AnyListBuilder()).put(value);
 		}
