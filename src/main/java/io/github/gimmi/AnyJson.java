@@ -1,5 +1,8 @@
 package io.github.gimmi;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -165,8 +168,25 @@ public class AnyJson {
 		str = stripToEmpty(str);
 		write(w, '"');
 		for (int i = 0; i < str.length(); i++) {
-			// TODO special chars
-			write(w, str.charAt(i));
+			// TODO does not write unicode chars as \x0000
+			char ch = str.charAt(i);
+			if (ch == '"') {
+				write(w, "\\\"");
+			} else if (ch == '/') {
+				write(w, "\\/");
+			} else if (ch == '\b') {
+				write(w, "\\b");
+			} else if (ch == '\f') {
+				write(w, "\\f");
+			} else if (ch == '\n') {
+				write(w, "\\n");
+			} else if (ch == '\t') {
+				write(w, "\\t");
+			} else if (ch == '\r') {
+				write(w, "\\r");
+			} else {
+				write(w, ch);
+			}
 		}
 		write(w, '"');
 	}

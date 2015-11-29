@@ -2,6 +2,7 @@ package any;
 
 import io.github.gimmi.Any;
 import io.github.gimmi.AnyJson;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -100,5 +101,16 @@ public class AnyJsonTest {
 		})).replace('"', '\'');
 
 		assertThat(json).isEqualTo("{'aryProp':['','','','val','-314','true','false'],'falseProp':'false','numProp':'-314','objProp':{'falseProp':'false','numProp':'-314','strProp':'val','trueProp':'true'},'strProp':'val','trueProp':'true'}");
+	}
+
+	@Test
+	public void should_serialize_special_chars() {
+		assertThat(AnyJson.toJson(Any.scalar("-\"-"))).isEqualTo("\"-\\\"-\"");
+		assertThat(AnyJson.toJson(Any.scalar("-/-"))).isEqualTo("\"-\\/-\"");
+		assertThat(AnyJson.toJson(Any.scalar("-\b-"))).isEqualTo("\"-\\b-\"");
+		assertThat(AnyJson.toJson(Any.scalar("-\f-"))).isEqualTo("\"-\\f-\"");
+		assertThat(AnyJson.toJson(Any.scalar("-\n-"))).isEqualTo("\"-\\n-\"");
+		assertThat(AnyJson.toJson(Any.scalar("-\t-"))).isEqualTo("\"-\\t-\"");
+		assertThat(AnyJson.toJson(Any.scalar("-\r-"))).isEqualTo("\"-\\r-\"");
 	}
 }
