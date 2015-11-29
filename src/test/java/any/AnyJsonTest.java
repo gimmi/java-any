@@ -113,4 +113,16 @@ public class AnyJsonTest {
 		assertThat(AnyJson.toJson(Any.scalar("-\t-"))).isEqualTo("\"-\\t-\"");
 		assertThat(AnyJson.toJson(Any.scalar("-\r-"))).isEqualTo("\"-\\r-\"");
 	}
+
+	@Test
+	public void should_deserialize_special_chars() {
+		assertThat(AnyJson.fromJson("\"-\\\"-\"").toString()).isEqualTo("-\"-");
+		assertThat(AnyJson.fromJson("\"-\\/-\"").toString()).isEqualTo("-/-");
+		assertThat(AnyJson.fromJson("\"-\\b-\"").toString()).isEqualTo("-\b-");
+		assertThat(AnyJson.fromJson("\"-\\f-\"").toString()).isEqualTo("-\f-");
+		assertThat(AnyJson.fromJson("\"-\\n-\"").toString()).isEqualTo("-\n-");
+		assertThat(AnyJson.fromJson("\"-\\t-\"").toString()).isEqualTo("-\t-");
+		assertThat(AnyJson.fromJson("\"-\\r-\"").toString()).isEqualTo("-\r-");
+		assertThat(AnyJson.fromJson("\"-\\u0058-\"").toString()).isEqualTo("-X-");
+	}
 }
