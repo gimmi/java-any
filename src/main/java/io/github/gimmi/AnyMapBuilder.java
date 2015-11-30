@@ -16,10 +16,11 @@ public class AnyMapBuilder {
 		return this;
 	}
 
-	public long length() {
+	public int count() {
 		return map.values().stream()
-			.filter(x -> x.length() > 0)
-			.count();
+			.filter(x -> x.count() > 0)
+			.mapToInt(x -> 1)
+			.sum();
 	}
 
 	public Any build() {
@@ -28,7 +29,7 @@ public class AnyMapBuilder {
 		} else {
 			TreeMap<String, Any> mapCopy = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 			for (Map.Entry<String, AnyListBuilder> entry : map.entrySet()) {
-				if (entry.getValue().length() > 0) {
+				if (entry.getValue().count() > 0) {
 					mapCopy.put(entry.getKey(), entry.getValue().build());
 				}
 			}

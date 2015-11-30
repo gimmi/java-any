@@ -10,19 +10,19 @@ public class AnyMapBuilderTest {
 	@Test
 	public void should_keep_track_of_length() {
 		AnyMapBuilder b = new AnyMapBuilder();
-		assertThat(b.length()).isZero();
-		assertThat(b.build().size()).isZero();
+		assertThat(b.count()).isZero();
+		assertThat(b.build().count()).isZero();
 		b.put("k1", Any.NULL);
-		assertThat(b.length()).isZero();
-		assertThat(b.build().size()).isZero();
+		assertThat(b.count()).isZero();
+		assertThat(b.build().count()).isZero();
 		b.put("k1", Any.scalar("val1"));
-		assertThat(b.length()).isEqualTo(1);
-		assertThat(b.build().size()).isEqualTo(1);
+		assertThat(b.count()).isEqualTo(1);
+		assertThat(b.build().count()).isEqualTo(1);
 		b.put("K1", Any.scalar("val2"));
-		assertThat(b.length()).isEqualTo(1);
-		assertThat(b.build().size()).isEqualTo(1);
+		assertThat(b.count()).isEqualTo(1);
+		assertThat(b.build().count()).isEqualTo(1);
 		b.put("k2", Any.scalar("val3"));
-		assertThat(b.length()).isEqualTo(2);
-		assertThat(b.build().size()).isEqualTo(2);
+		assertThat(b.count()).isEqualTo(2);
+		assertThat(b.build().count()).isEqualTo(2);
 	}
 }

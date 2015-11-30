@@ -42,7 +42,7 @@ public class AnyTest {
 	public void should_handle_empty_lists_like_null_objects() {
 		Any list = Any.list(l -> {});
 		Any nil = Any.NULL;
-		assertThat(list.size()).isEqualTo(nil.size());
+		assertThat(list.count()).isEqualTo(nil.count());
 		assertThat(list.values()).containsExactlyElementsOf(nil.values());
 		assertThat(list.keys()).containsExactlyElementsOf(nil.keys());
 		assertThat(list.toString()).isEqualTo(nil.toString());
@@ -61,7 +61,7 @@ public class AnyTest {
 			l.put(Any.scalar("2"));
 		});
 
-		assertThat(list.size()).isEqualTo(2);
+		assertThat(list.count()).isEqualTo(2);
 		assertThat(list.values()).extracting(Any::toString).containsExactly("1", "2");
 		assertThat(list.keys()).isEmpty();
 		assertThat(list.toString()).isEqualTo("1");
@@ -79,7 +79,7 @@ public class AnyTest {
 	public void should_handle_empty_maps_like_null_objects() {
 		Any map = Any.map(x -> {});
 		Any nil = Any.NULL;
-		assertThat(map.size()).isEqualTo(nil.size());
+		assertThat(map.count()).isEqualTo(nil.count());
 		assertThat(map.values()).containsExactlyElementsOf(nil.values());
 		assertThat(map.keys()).containsExactlyElementsOf(nil.keys());
 		assertThat(map.toString()).isEqualTo(nil.toString());
@@ -98,7 +98,7 @@ public class AnyTest {
 			x.put("CAPITAL", Any.scalar("2"));
 			x.put(" k3 ", Any.scalar("3"));
 		});
-		assertThat(map.size()).isEqualTo(3);
+		assertThat(map.count()).isEqualTo(3);
 		assertThat(map.values()).extracting(Any::toString).containsExactly("2", "1", "3");
 		assertThat(map.keys()).containsExactly("CAPITAL", "k1", "k3");
 		assertThat(map.toString()).isEqualTo("2");
@@ -148,11 +148,11 @@ public class AnyTest {
 			b.put("k", Any.NULL);
 		});
 
-		assertThat(any.size()).isEqualTo(1);
-		assertThat(any.get("k").size()).isEqualTo(4);
-		assertThat(any.get("k").get(0).size()).isZero();
+		assertThat(any.count()).isEqualTo(1);
+		assertThat(any.get("k").count()).isEqualTo(4);
+		assertThat(any.get("k").get(0).count()).isZero();
 		assertThat(any.get("k").get(1).toString()).isEqualTo("v1");
-		assertThat(any.get("k").get(2).size()).isZero();
+		assertThat(any.get("k").get(2).count()).isZero();
 		assertThat(any.get("k").get(3).toString()).isEqualTo("v2");
 	}
 
@@ -166,9 +166,9 @@ public class AnyTest {
 			b.put(Any.NULL);
 		});
 
-		assertThat(any.size()).isEqualTo(3);
-		assertThat(any.get(0).size()).isZero();
-		assertThat(any.get(1).size()).isZero();
+		assertThat(any.count()).isEqualTo(3);
+		assertThat(any.get(0).count()).isZero();
+		assertThat(any.get(1).count()).isZero();
 		assertThat(any.get(2).toString()).isEqualTo("val");
 	}
 }

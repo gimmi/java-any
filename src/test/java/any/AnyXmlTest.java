@@ -2,7 +2,6 @@ package any;
 
 import io.github.gimmi.Any;
 import io.github.gimmi.AnyXml;
-import org.assertj.core.api.StrictAssertions;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -37,18 +36,18 @@ public class AnyXmlTest {
 
 		Any any = AnyXml.fromXml(xml);
 
-		assertThat(any.size()).isEqualTo(6);
+		assertThat(any.count()).isEqualTo(6);
 		assertThat(any.get("strProp").toString()).isEqualTo("val");
 		assertThat(any.get("numProp").toBigDecimal()).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.get("trueProp").toBoolean()).isTrue();
 		assertThat(any.get("falseProp").toBoolean()).isFalse();
-		assertThat(any.get("aryProp").size()).isEqualTo(5);
+		assertThat(any.get("aryProp").count()).isEqualTo(5);
 		assertThat(any.get("aryProp").get(0).toString()).isEmpty();
 		assertThat(any.get("aryProp").get(1).toString()).isEqualTo("val");
 		assertThat(any.get("aryProp").get(2).toString()).isEqualTo("-3.14e2");
 		assertThat(any.get("aryProp").get(3).toString()).isEqualTo("true");
 		assertThat(any.get("aryProp").get(4).toString()).isEqualTo("false");
-		assertThat(any.get("objProp").size()).isEqualTo(4);
+		assertThat(any.get("objProp").count()).isEqualTo(4);
 		assertThat(any.get("objProp").keys()).containsOnly("StrProp", "NumProp", "TrueProp", "FalseProp");
 		assertThat(any.get("objProp").get("strProp").toString()).isEqualTo("val");
 		assertThat(any.get("objProp").get("numProp").toString()).isEqualTo("-3.14e2");
@@ -70,7 +69,7 @@ public class AnyXmlTest {
 		Any any = AnyXml.fromXml(xml);
 
 		assertThat(any.keys()).containsOnly("StrProp", "ObjProp");
-		assertThat(any.size()).isEqualTo(2);
+		assertThat(any.count()).isEqualTo(2);
 	}
 
 	@Test

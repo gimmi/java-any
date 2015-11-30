@@ -54,7 +54,7 @@ public class Any {
         return b.build();
     }
 
-    public int size() {
+    public int count() {
         if (map != null) {
             return map.size();
         } else if (list != null) {

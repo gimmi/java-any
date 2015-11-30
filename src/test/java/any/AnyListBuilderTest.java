@@ -10,19 +10,19 @@ public class AnyListBuilderTest {
 	@Test
 	public void should_keep_track_of_length() {
 		AnyListBuilder b = new AnyListBuilder();
-		assertThat(b.length()).isZero();
-		assertThat(b.build().size()).isZero();
+		assertThat(b.count()).isZero();
+		assertThat(b.build().count()).isZero();
 		b.put(Any.NULL);
-		assertThat(b.length()).isZero();
-		assertThat(b.build().size()).isZero();
+		assertThat(b.count()).isZero();
+		assertThat(b.build().count()).isZero();
 		b.put(Any.NULL);
-		assertThat(b.length()).isZero();
-		assertThat(b.build().size()).isZero();
+		assertThat(b.count()).isZero();
+		assertThat(b.build().count()).isZero();
 		b.put(Any.scalar("val"));
-		assertThat(b.length()).isEqualTo(3);
-		assertThat(b.build().size()).isEqualTo(3);
+		assertThat(b.count()).isEqualTo(3);
+		assertThat(b.build().count()).isEqualTo(3);
 		b.put(Any.NULL);
-		assertThat(b.length()).isEqualTo(3);
-		assertThat(b.build().size()).isEqualTo(3);
+		assertThat(b.count()).isEqualTo(3);
+		assertThat(b.build().count()).isEqualTo(3);
 	}
 }

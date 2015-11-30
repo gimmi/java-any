@@ -10,14 +10,14 @@ public class AnyListBuilder {
 		if (value == null) {
 			value = Any.NULL;
 		}
-		if (value.size() > 0) {
+		if (value.count() > 0) {
 			lastNonNullIndex = list.size();
 		}
 		list.add(value);
 		return this;
 	}
 
-	public int length() {
+	public int count() {
 		return lastNonNullIndex + 1;
 	}
 	

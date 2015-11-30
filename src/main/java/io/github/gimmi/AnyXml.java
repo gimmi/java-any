@@ -9,7 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Stack;
@@ -56,7 +55,7 @@ public class AnyXml {
 			AnyMapBuilder builder = elements.pop();
 			any = Any.scalar(sb.toString());
 			sb.setLength(0);
-			if (builder.length() > 0) {
+			if (builder.count() > 0) {
 				any = builder.put("text", any).build();
 			}
 

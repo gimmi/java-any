@@ -2,7 +2,6 @@ package any;
 
 import io.github.gimmi.Any;
 import io.github.gimmi.AnyJson;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -47,20 +46,20 @@ public class AnyJsonTest {
 
 		Any any = AnyJson.fromJson(json);
 
-		assertThat(any.size()).isEqualTo(6);
+		assertThat(any.count()).isEqualTo(6);
 		assertThat(any.get("strProp").toString()).isEqualTo("val");
 		assertThat(any.get("numProp").toBigDecimal()).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.get("trueProp").toBoolean()).isTrue();
 		assertThat(any.get("falseProp").toBoolean()).isFalse();
-		assertThat(any.get("aryProp").size()).isEqualTo(7);
-		assertThat(any.get("aryProp").get(0).size()).isZero();
-		assertThat(any.get("aryProp").get(1).size()).isZero();
-		assertThat(any.get("aryProp").get(2).size()).isZero();
+		assertThat(any.get("aryProp").count()).isEqualTo(7);
+		assertThat(any.get("aryProp").get(0).count()).isZero();
+		assertThat(any.get("aryProp").get(1).count()).isZero();
+		assertThat(any.get("aryProp").get(2).count()).isZero();
 		assertThat(any.get("aryProp").get(3).toString()).isEqualTo("val");
 		assertThat(any.get("aryProp").get(4).toBigDecimal()).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.get("aryProp").get(5).toBoolean()).isTrue();
 		assertThat(any.get("aryProp").get(6).toBoolean()).isFalse();
-		assertThat(any.get("objProp").size()).isEqualTo(4);
+		assertThat(any.get("objProp").count()).isEqualTo(4);
 		assertThat(any.get("objProp").get("strProp").toString()).isEqualTo("val");
 		assertThat(any.get("objProp").get("numProp").toBigDecimal()).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.get("objProp").get("trueProp").toBoolean()).isTrue();
