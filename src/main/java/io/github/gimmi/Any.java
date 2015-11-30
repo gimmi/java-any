@@ -9,17 +9,6 @@ import java.util.function.Consumer;
 import static io.github.gimmi.Utils.stripToNull;
 
 public class Any {
-    public static Any NULL = new Any(null, null, null);
-    private final String scalar;
-    private final TreeMap<String, Any> map;
-    private final ArrayList<Any> list;
-
-    protected Any(String scalar, TreeMap<String, Any> map, ArrayList<Any> list) {
-        this.scalar = scalar;
-        this.list = list;
-        this.map = map;
-    }
-
     public static Any scalar(BigDecimal value) {
         if (value == null) {
             return Any.NULL;
@@ -52,6 +41,17 @@ public class Any {
         AnyListBuilder b = new AnyListBuilder();
         builder.accept(b);
         return b.build();
+    }
+
+    public static Any NULL = new Any(null, null, null);
+    private final String scalar;
+    private final TreeMap<String, Any> map;
+    private final ArrayList<Any> list;
+
+    protected Any(String scalar, TreeMap<String, Any> map, ArrayList<Any> list) {
+        this.scalar = scalar;
+        this.list = list;
+        this.map = map;
     }
 
     public int count() {
