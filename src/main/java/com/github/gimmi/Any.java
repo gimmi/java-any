@@ -1,4 +1,4 @@
-package io.github.gimmi;
+package com.github.gimmi;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.TreeMap;
 import java.util.function.Consumer;
 
-import static io.github.gimmi.Utils.stripToNull;
+import static com.github.gimmi.Utils.stripToNull;
 
 public class Any {
     public static Any scalar(BigDecimal value) {

@@ -1,9 +1,9 @@
-package io.github.gimmi;
+package com.github.gimmi;
 
 import java.io.*;
 import java.util.Iterator;
 
-import static io.github.gimmi.Utils.stripToEmpty;
+import static com.github.gimmi.Utils.stripToEmpty;
 
 public class AnyJson {
 	public static Any fromJson(String str) {

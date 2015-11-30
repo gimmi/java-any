@@ -1,6 +1,6 @@
-package io.github.gimmi;
+package com.github.gimmi;
 
-public class Utils {
+class Utils {
 	private static final int INDEX_NOT_FOUND = -1;
 	private static final String EMPTY = "";
 

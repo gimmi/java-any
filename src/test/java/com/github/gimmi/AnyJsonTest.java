@@ -1,7 +1,7 @@
-package any;
+package com.github.gimmi;
 
-import io.github.gimmi.Any;
-import io.github.gimmi.AnyJson;
+import com.github.gimmi.Any;
+import com.github.gimmi.AnyJson;
 import org.junit.Test;
 
 import java.math.BigDecimal;

@@ -1,7 +1,7 @@
-package any;
+package com.github.gimmi;
 
-import io.github.gimmi.Any;
-import io.github.gimmi.AnyListBuilder;
+import com.github.gimmi.Any;
+import com.github.gimmi.AnyListBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;

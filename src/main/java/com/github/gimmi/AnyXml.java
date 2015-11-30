@@ -1,4 +1,4 @@
-package io.github.gimmi;
+package com.github.gimmi;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;

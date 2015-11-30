@@ -1,6 +1,6 @@
-package any;
+package com.github.gimmi;
 
-import io.github.gimmi.Any;
+import com.github.gimmi.Any;
 import org.junit.Test;
 
 import java.math.BigDecimal;

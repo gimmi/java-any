@@ -1,7 +1,7 @@
-package any;
+package com.github.gimmi;
 
-import io.github.gimmi.Any;
-import io.github.gimmi.AnyMapBuilder;
+import com.github.gimmi.Any;
+import com.github.gimmi.AnyMapBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.StrictAssertions.assertThat;

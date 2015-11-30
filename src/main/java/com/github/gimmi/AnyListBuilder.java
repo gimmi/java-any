@@ -1,4 +1,4 @@
-package io.github.gimmi;
+package com.github.gimmi;
 
 import java.util.ArrayList;
 

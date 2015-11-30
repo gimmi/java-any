@@ -1,9 +1,9 @@
-package io.github.gimmi;
+package com.github.gimmi;
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import static io.github.gimmi.Utils.stripToEmpty;
+import static com.github.gimmi.Utils.stripToEmpty;
 
 public class AnyMapBuilder {
 	private final TreeMap<String, AnyListBuilder> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);

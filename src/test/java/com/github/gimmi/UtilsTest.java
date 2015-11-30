@@ -1,6 +1,5 @@
-package any;
+package com.github.gimmi;
 
-import io.github.gimmi.Utils;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
