@@ -1,6 +1,9 @@
 package com.github.gimmi;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.TreeMap;
@@ -28,6 +31,27 @@ public class Any {
 	}
 
 	public static Any scalar(Boolean value) {
+		if (value == null) {
+			return Any.NULL;
+		}
+		return new Any(value.toString(), null, null);
+	}
+
+	public static Any scalar(LocalDate value) {
+		if (value == null) {
+			return Any.NULL;
+		}
+		return new Any(value.toString(), null, null);
+	}
+
+	public static Any scalar(LocalTime value) {
+		if (value == null) {
+			return Any.NULL;
+		}
+		return new Any(value.toString(), null, null);
+	}
+
+	public static Any scalar(LocalDateTime value) {
 		if (value == null) {
 			return Any.NULL;
 		}
@@ -110,6 +134,18 @@ public class Any {
 
 	public boolean toBoolean() {
 		return Utils.toBoolean(getScalar("false"));
+	}
+
+	public LocalDate toLocalDate() {
+		return LocalDate.parse(getScalar(LocalDate.MIN.toString()));
+	}
+
+	public LocalTime toLocalTime() {
+		return LocalTime.parse(getScalar(LocalTime.MIN.toString()));
+	}
+
+	public LocalDateTime toLocalDateTime() {
+		return LocalDateTime.parse(getScalar(LocalDateTime.MIN.toString()));
 	}
 
 	public Iterable<String> keys() {

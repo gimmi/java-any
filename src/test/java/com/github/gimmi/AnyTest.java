@@ -1,9 +1,12 @@
 package com.github.gimmi;
 
-import com.github.gimmi.Any;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatterBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -170,5 +173,32 @@ public class AnyTest {
 		assertThat(any.get(0).count()).isZero();
 		assertThat(any.get(1).count()).isZero();
 		assertThat(any.get(2).toString()).isEqualTo("val");
+	}
+
+	@Test
+	public void should_handle_localdate_scalar() {
+		assertThat(Any.scalar(LocalDate.of(2015, 12, 2)).count()).isEqualTo(1);
+		assertThat(Any.scalar(LocalDate.of(2015, 12, 2)).toLocalDate()).isEqualTo(LocalDate.of(2015, 12, 2));
+		assertThat(Any.scalar((LocalDate) null).count()).isZero();
+		assertThat(Any.scalar((LocalDate) null).toLocalDate()).isEqualTo(LocalDate.MIN);
+		assertThat(Any.scalar("2015-12-02").toLocalDate()).isEqualTo(LocalDate.of(2015, 12, 2));
+	}
+
+	@Test
+	public void should_handle_localtime_scalar() {
+		assertThat(Any.scalar(LocalTime.of(19, 30, 40)).count()).isEqualTo(1);
+		assertThat(Any.scalar(LocalTime.of(19, 30, 40)).toLocalTime()).isEqualTo(LocalTime.of(19, 30, 40));
+		assertThat(Any.scalar((LocalTime) null).count()).isZero();
+		assertThat(Any.scalar((LocalTime) null).toLocalTime()).isEqualTo(LocalTime.MIN);
+		assertThat(Any.scalar("19:30:40").toLocalTime()).isEqualTo(LocalTime.of(19, 30, 40));
+	}
+
+	@Test
+	public void should_handle_localdatetime_scalar() {
+		assertThat(Any.scalar(LocalDateTime.of(2015, 12, 2, 19, 30, 40)).count()).isEqualTo(1);
+		assertThat(Any.scalar(LocalDateTime.of(2015, 12, 2, 19, 30, 40)).toLocalDateTime()).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
+		assertThat(Any.scalar((LocalDateTime) null).count()).isZero();
+		assertThat(Any.scalar((LocalDateTime) null).toLocalDateTime()).isEqualTo(LocalDateTime.MIN);
+		assertThat(Any.scalar("2015-12-02T19:30:40").toLocalDateTime()).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
 	}
 }
