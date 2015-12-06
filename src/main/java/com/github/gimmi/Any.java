@@ -89,7 +89,7 @@ public class Any {
 		return 0;
 	}
 
-	public Any get(String key) {
+	public Any key(String key) {
 		key = stripToNull(key);
 		if (key == null) {
 			return Any.NULL;
@@ -98,27 +98,17 @@ public class Any {
 			if (val != null) {
 				return val;
 			}
-		} else if (list != null) {
-			Integer index;
-			try {
-				index = Integer.parseInt(key); // TODO check this for refactor: http://stackoverflow.com/a/8392060/66629
-			} catch (NumberFormatException e) {
-				index = null;
-			}
-			return get(index);
 		}
 		return Any.NULL;
 	}
 
-	public Any get(Integer index) {
+	public Any at(Integer index) {
 		if (index == null) {
 			return Any.NULL;
 		} else if (list != null) {
 			if (index >= 0 && index < list.size()) {
 				return list.get(index);
 			}
-		} else if (map != null) {
-			return get(index.toString());
 		}
 		return Any.NULL;
 	}

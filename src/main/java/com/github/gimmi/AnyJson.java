@@ -95,7 +95,7 @@ public class AnyJson {
 					comma = ",";
 					writeJsonString(key, w);
 					write(w, ':');
-					toJson(any.get(key), w);
+					toJson(any.key(key), w);
 				}
 				w.write('}');
 			} else if (any.count() > 1) {

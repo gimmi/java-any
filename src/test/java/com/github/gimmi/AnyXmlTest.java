@@ -35,22 +35,22 @@ public class AnyXmlTest {
 		Any any = AnyXml.fromXml(xml);
 
 		assertThat(any.count()).isEqualTo(6);
-		assertThat(any.get("strProp").toString()).isEqualTo("val");
-		assertThat(any.get("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
-		assertThat((boolean) any.get("trueProp").val(false)).isTrue();
-		assertThat((boolean) any.get("falseProp").val(false)).isFalse();
-		assertThat(any.get("aryProp").count()).isEqualTo(5);
-		assertThat(any.get("aryProp").get(0).toString()).isEmpty();
-		assertThat(any.get("aryProp").get(1).toString()).isEqualTo("val");
-		assertThat(any.get("aryProp").get(2).toString()).isEqualTo("-3.14e2");
-		assertThat(any.get("aryProp").get(3).toString()).isEqualTo("true");
-		assertThat(any.get("aryProp").get(4).toString()).isEqualTo("false");
-		assertThat(any.get("objProp").count()).isEqualTo(4);
-		assertThat(any.get("objProp").keys()).containsOnly("StrProp", "NumProp", "TrueProp", "FalseProp");
-		assertThat(any.get("objProp").get("strProp").toString()).isEqualTo("val");
-		assertThat(any.get("objProp").get("numProp").toString()).isEqualTo("-3.14e2");
-		assertThat(any.get("objProp").get("trueProp").toString()).isEqualTo("true");
-		assertThat(any.get("objProp").get("falseProp").toString()).isEqualTo("false");
+		assertThat(any.key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+		assertThat((boolean) any.key("trueProp").val(false)).isTrue();
+		assertThat((boolean) any.key("falseProp").val(false)).isFalse();
+		assertThat(any.key("aryProp").count()).isEqualTo(5);
+		assertThat(any.key("aryProp").at(0).toString()).isEmpty();
+		assertThat(any.key("aryProp").at(1).toString()).isEqualTo("val");
+		assertThat(any.key("aryProp").at(2).toString()).isEqualTo("-3.14e2");
+		assertThat(any.key("aryProp").at(3).toString()).isEqualTo("true");
+		assertThat(any.key("aryProp").at(4).toString()).isEqualTo("false");
+		assertThat(any.key("objProp").count()).isEqualTo(4);
+		assertThat(any.key("objProp").keys()).containsOnly("StrProp", "NumProp", "TrueProp", "FalseProp");
+		assertThat(any.key("objProp").key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("objProp").key("numProp").toString()).isEqualTo("-3.14e2");
+		assertThat(any.key("objProp").key("trueProp").toString()).isEqualTo("true");
+		assertThat(any.key("objProp").key("falseProp").toString()).isEqualTo("false");
 	}
 
 	@Test
@@ -79,8 +79,8 @@ public class AnyXmlTest {
 		Any any = AnyXml.fromXml(xml);
 
 		assertThat(any.keys()).containsOnly("attr1", "attr2", "text");
-		assertThat(any.get("attr1").toString()).isEqualTo("val1");
-		assertThat(any.get("attr2").toString()).isEqualTo("val2");
-		assertThat(any.get("text").toString()).isEqualTo("val3");
+		assertThat(any.key("attr1").toString()).isEqualTo("val1");
+		assertThat(any.key("attr2").toString()).isEqualTo("val2");
+		assertThat(any.key("text").toString()).isEqualTo("val3");
 	}
 }

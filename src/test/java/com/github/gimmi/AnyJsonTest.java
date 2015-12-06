@@ -45,23 +45,23 @@ public class AnyJsonTest {
 		Any any = AnyJson.fromJson(json);
 
 		assertThat(any.count()).isEqualTo(6);
-		assertThat(any.get("strProp").toString()).isEqualTo("val");
-		assertThat(any.get("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
-		assertThat(any.get("trueProp").val(false)).isTrue();
-		assertThat(any.get("falseProp").val(false)).isFalse();
-		assertThat(any.get("aryProp").count()).isEqualTo(7);
-		assertThat(any.get("aryProp").get(0).count()).isZero();
-		assertThat(any.get("aryProp").get(1).count()).isZero();
-		assertThat(any.get("aryProp").get(2).count()).isZero();
-		assertThat(any.get("aryProp").get(3).toString()).isEqualTo("val");
-		assertThat(any.get("aryProp").get(4).val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
-		assertThat(any.get("aryProp").get(5).val(false)).isTrue();
-		assertThat(any.get("aryProp").get(6).val(false)).isFalse();
-		assertThat(any.get("objProp").count()).isEqualTo(4);
-		assertThat(any.get("objProp").get("strProp").toString()).isEqualTo("val");
-		assertThat(any.get("objProp").get("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
-		assertThat(any.get("objProp").get("trueProp").val(false)).isTrue();
-		assertThat(any.get("objProp").get("falseProp").val(false)).isFalse();
+		assertThat(any.key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+		assertThat(any.key("trueProp").val(false)).isTrue();
+		assertThat(any.key("falseProp").val(false)).isFalse();
+		assertThat(any.key("aryProp").count()).isEqualTo(7);
+		assertThat(any.key("aryProp").at(0).count()).isZero();
+		assertThat(any.key("aryProp").at(1).count()).isZero();
+		assertThat(any.key("aryProp").at(2).count()).isZero();
+		assertThat(any.key("aryProp").at(3).toString()).isEqualTo("val");
+		assertThat(any.key("aryProp").at(4).val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+		assertThat(any.key("aryProp").at(5).val(false)).isTrue();
+		assertThat(any.key("aryProp").at(6).val(false)).isFalse();
+		assertThat(any.key("objProp").count()).isEqualTo(4);
+		assertThat(any.key("objProp").key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("objProp").key("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+		assertThat(any.key("objProp").key("trueProp").val(false)).isTrue();
+		assertThat(any.key("objProp").key("falseProp").val(false)).isFalse();
 	}
 
 	@Test
