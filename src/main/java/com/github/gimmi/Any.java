@@ -4,10 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -203,6 +200,8 @@ public class Any {
 			return map.values();
 		} else if (list != null) {
 			return list;
+		} else if (scalar != null) {
+			return Collections.singletonList(this);
 		}
 		return Collections.emptyList();
 	}

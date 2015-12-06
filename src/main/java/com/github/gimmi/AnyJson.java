@@ -87,7 +87,6 @@ public class AnyJson {
 		try {
 			String comma = "";
 			Iterator<String> keys = any.keys().iterator();
-			Iterator<Any> values = any.values().iterator();
 			if (keys.hasNext()) {
 				w.write('{');
 				while (keys.hasNext()) {
@@ -99,10 +98,9 @@ public class AnyJson {
 					toJson(any.get(key), w);
 				}
 				w.write('}');
-			} else if (values.hasNext()) {
+			} else if (any.count() > 1) {
 				w.write('[');
-				while (values.hasNext()) {
-					Any value = values.next();
+				for (Any value : any.values()) {
 					write(w, comma);
 					comma = ",";
 					toJson(value, w);

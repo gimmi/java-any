@@ -202,4 +202,17 @@ public class AnyTest {
 		assertThat(Any.from((LocalDateTime) null).val(LocalDateTime.MIN)).isEqualTo(LocalDateTime.MIN);
 		assertThat(Any.from("2015-12-02T19:30:40").val(LocalDateTime.MIN)).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
 	}
+
+	@Test
+	public void should_treat_scalar_like_single_value_list() {
+		Any scalar = Any.from("hello");
+		Any list = Any.list(b -> b.put(scalar));
+		assertThat(scalar.count()).isEqualTo(list.count());
+		assertThat(scalar.keys()).containsExactlyElementsOf(list.keys());
+		assertThat(scalar.values()).containsExactlyElementsOf(list.values());
+		assertThat(scalar.get(0)).isSameAs(list.get(0));
+		assertThat(scalar.get(1)).isSameAs(list.get(1));
+		assertThat(scalar.get("0")).isSameAs(list.get("0"));
+		assertThat(scalar.get("other")).isSameAs(list.get("other"));
+	}
 }
