@@ -1,7 +1,5 @@
 package com.github.gimmi;
 
-import com.github.gimmi.Any;
-import com.github.gimmi.AnyXml;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -38,9 +36,9 @@ public class AnyXmlTest {
 
 		assertThat(any.count()).isEqualTo(6);
 		assertThat(any.get("strProp").toString()).isEqualTo("val");
-		assertThat(any.get("numProp").toBigDecimal()).isEqualByComparingTo(new BigDecimal("-314"));
-		assertThat(any.get("trueProp").toBoolean()).isTrue();
-		assertThat(any.get("falseProp").toBoolean()).isFalse();
+		assertThat(any.get("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+		assertThat((boolean) any.get("trueProp").val(false)).isTrue();
+		assertThat((boolean) any.get("falseProp").val(false)).isFalse();
 		assertThat(any.get("aryProp").count()).isEqualTo(5);
 		assertThat(any.get("aryProp").get(0).toString()).isEmpty();
 		assertThat(any.get("aryProp").get(1).toString()).isEqualTo("val");

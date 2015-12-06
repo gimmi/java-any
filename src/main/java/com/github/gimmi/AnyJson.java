@@ -53,12 +53,12 @@ public class AnyJson {
 				return Any.NULL;
 			} else if (ch == 't') {
 				readExpected(reader, "true");
-				return Any.scalar(true);
+				return Any.from(true);
 			} else if (ch == 'f') {
 				readExpected(reader, "false");
-				return Any.scalar(false);
+				return Any.from(false);
 			} else if (ch == '"') {
-				return Any.scalar(parseString(reader));
+				return Any.from(parseString(reader));
 			} else if (ch == '-' || Character.isDigit(ch)) {
 				StringBuilder sb = new StringBuilder();
 				while (ch == '+' || ch == '.' || ch == '-' || ch == 'e' || ch == 'E' || Character.isDigit(ch)) {
@@ -69,7 +69,7 @@ public class AnyJson {
 					}
 					ch = (char) peek;
 				}
-				return Any.scalar(sb.toString());
+				return Any.from(sb.toString());
 			}
 			throw new RuntimeException("Unexpected char '" + ch + "'");
 		} catch (IOException e) {

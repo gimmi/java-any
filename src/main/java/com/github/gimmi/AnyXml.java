@@ -40,7 +40,7 @@ public class AnyXml {
 		public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
 			AnyMapBuilder builder = new AnyMapBuilder();
 			for (int i = 0; i < attributes.getLength(); i++) {
-				builder.put(attributes.getLocalName(i), Any.scalar(attributes.getValue(i)));
+				builder.put(attributes.getLocalName(i), Any.from(attributes.getValue(i)));
 			}
 			elements.push(builder);
 		}
@@ -53,7 +53,7 @@ public class AnyXml {
 		@Override
 		public void endElement(String uri, String localName, String qName) throws SAXException {
 			AnyMapBuilder builder = elements.pop();
-			any = Any.scalar(sb.toString());
+			any = Any.from(sb.toString());
 			sb.setLength(0);
 			if (builder.count() > 0) {
 				any = builder.put("text", any).build();

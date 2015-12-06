@@ -6,59 +6,52 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.TreeMap;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static com.github.gimmi.Utils.stripToNull;
 
 public class Any {
 	public static final Any NULL = new Any(null, null, null);
-	private final String scalar;
-	private final TreeMap<String, Any> map;
-	private final ArrayList<Any> list;
 
-	protected Any(String scalar, TreeMap<String, Any> map, ArrayList<Any> list) {
-		this.scalar = scalar;
-		this.list = list;
-		this.map = map;
-	}
-
-	public static Any scalar(BigDecimal value) {
+	public static Any from(BigDecimal value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toPlainString(), null, null);
 	}
 
-	public static Any scalar(Boolean value) {
+	public static Any from(Boolean value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any scalar(LocalDate value) {
+	public static Any from(LocalDate value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any scalar(LocalTime value) {
+	public static Any from(LocalTime value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any scalar(LocalDateTime value) {
+	public static Any from(LocalDateTime value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any scalar(String value) {
+	public static Any from(String value) {
 		value = stripToNull(value);
 		if (value == null) {
 			return Any.NULL;
@@ -76,6 +69,16 @@ public class Any {
 		AnyListBuilder b = new AnyListBuilder();
 		builder.accept(b);
 		return b.build();
+	}
+
+	private final String scalar;
+	private final TreeMap<String, Any> map;
+	private final ArrayList<Any> list;
+
+	protected Any(String scalar, TreeMap<String, Any> map, ArrayList<Any> list) {
+		this.scalar = scalar;
+		this.list = list;
+		this.map = map;
 	}
 
 	public int count() {
@@ -101,7 +104,7 @@ public class Any {
 		} else if (list != null) {
 			Integer index;
 			try {
-				index = Integer.parseInt(key);
+				index = Integer.parseInt(key); // TODO check this for refactor: http://stackoverflow.com/a/8392060/66629
 			} catch (NumberFormatException e) {
 				index = null;
 			}
@@ -125,27 +128,67 @@ public class Any {
 
 	@Override
 	public String toString() {
-		return getScalar("");
+		return val("");
 	}
 
-	public BigDecimal toBigDecimal() {
-		return new BigDecimal(getScalar("0"));
+	public Optional<String> val() {
+		return Optional.ofNullable(getScalar(null));
 	}
 
-	public boolean toBoolean() {
-		return Utils.toBoolean(getScalar("false"));
+	public String val(String def) {
+		return getScalar(def);
 	}
 
-	public LocalDate toLocalDate() {
-		return LocalDate.parse(getScalar(LocalDate.MIN.toString()));
+	public BigDecimal val(BigDecimal def) {
+		String v = getScalar(null);
+		if (v == null) {
+			return def;
+		}
+		return new BigDecimal(v);
 	}
 
-	public LocalTime toLocalTime() {
-		return LocalTime.parse(getScalar(LocalTime.MIN.toString()));
+	public Integer val(Integer def) {
+		String v = getScalar(null);
+		if (v == null) {
+			return def;
+		}
+		return Integer.parseInt(v);
 	}
 
-	public LocalDateTime toLocalDateTime() {
-		return LocalDateTime.parse(getScalar(LocalDateTime.MIN.toString()));
+	public Boolean val(Boolean def) {
+		String v = getScalar(null);
+		if (v == null) {
+			return def;
+		}
+		return Boolean.parseBoolean(v);
+	}
+
+	public LocalDate val(LocalDate def) {
+		String v = getScalar(null);
+		if (v == null) {
+			return def;
+		}
+		return LocalDate.parse(v);
+	}
+
+	public LocalTime val(LocalTime def) {
+		String v = getScalar(null);
+		if (v == null) {
+			return def;
+		}
+		return LocalTime.parse(v);
+	}
+
+	public LocalDateTime val(LocalDateTime def) {
+		String v = getScalar(null);
+		if (v == null) {
+			return def;
+		}
+		return LocalDateTime.parse(v);
+	}
+
+	public <T> T val(Function<String, T> converter) {
+		return converter.apply(getScalar(null));
 	}
 
 	public Iterable<String> keys() {

@@ -1,7 +1,5 @@
 package com.github.gimmi;
 
-import com.github.gimmi.Any;
-import com.github.gimmi.AnyListBuilder;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,7 +16,7 @@ public class AnyListBuilderTest {
 		b.put(Any.NULL);
 		assertThat(b.count()).isZero();
 		assertThat(b.build().count()).isZero();
-		b.put(Any.scalar("val"));
+		b.put(Any.from("val"));
 		assertThat(b.count()).isEqualTo(3);
 		assertThat(b.build().count()).isEqualTo(3);
 		b.put(Any.NULL);

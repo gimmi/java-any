@@ -6,39 +6,40 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatterBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnyTest {
 	@Test
 	public void should_handle_string_scalar() {
-		assertThat(Any.scalar("hello world").toString()).isEqualTo("hello world");
-		assertThat(Any.scalar((String) null).toString()).isEqualTo("");
-		assertThat(Any.scalar("  ").toString()).isEqualTo("");
-		assertThat(Any.scalar(" x ").toString()).isEqualTo("x");
-		assertThat(Any.scalar("\n\trow1\n\trow2\n").toString()).isEqualTo("row1\n\trow2");
+		assertThat(Any.from("hello world").toString()).isEqualTo("hello world");
+		assertThat(Any.from((String) null).toString()).isEqualTo("");
+		assertThat(Any.from("  ").toString()).isEqualTo("");
+		assertThat(Any.from(" x ").toString()).isEqualTo("x");
+		assertThat(Any.from("\n\trow1\n\trow2\n").toString()).isEqualTo("row1\n\trow2");
 	}
 
 	@Test
 	public void should_handle_number_scalar() {
-		assertThat(Any.scalar(BigDecimal.valueOf(0)).toBigDecimal()).isEqualTo(BigDecimal.valueOf(0));
-		assertThat(Any.map(x -> x.put("key", Any.scalar("3.14"))).toBigDecimal()).isEqualTo(new BigDecimal("3.14"));
-		assertThat(Any.list(x -> x.put(Any.scalar("3.14"))).toBigDecimal()).isEqualTo(new BigDecimal("3.14"));
-		assertThat(Any.scalar(BigDecimal.valueOf(314, 2)).toBigDecimal()).isEqualTo(BigDecimal.valueOf(314, 2));
-		assertThat(Any.scalar((BigDecimal) null).toBigDecimal()).isEqualTo(BigDecimal.ZERO);
-		assertThat(Any.scalar("   ").toBigDecimal()).isEqualTo(BigDecimal.ZERO);
+		assertThat(Any.from(BigDecimal.valueOf(0)).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(0));
+		Any any1 = Any.map(x -> x.put("key", Any.from("3.14")));
+		assertThat(any1.val(BigDecimal.ZERO)).isEqualTo(new BigDecimal("3.14"));
+		Any any = Any.list(x -> x.put(Any.from("3.14")));
+		assertThat(any.val(BigDecimal.ZERO)).isEqualTo(new BigDecimal("3.14"));
+		assertThat(Any.from(BigDecimal.valueOf(314, 2)).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(314, 2));
+		assertThat(Any.from((BigDecimal) null).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
+		assertThat(Any.from("   ").val(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
 	}
 
 	@Test
 	public void should_handle_boolean_scalar() {
-		assertThat(Any.scalar(true).toBoolean()).isTrue();
-		assertThat(Any.scalar(false).toBoolean()).isFalse();
-		assertThat(Any.scalar((Boolean) null).toBoolean()).isFalse();
-		assertThat(Any.scalar("   ").toBoolean()).isFalse();
-		assertThat(Any.scalar(" true ").toBoolean()).isTrue();
-		assertThat(Any.scalar(" FALSE ").toBoolean()).isFalse();
-		assertThat(Any.scalar("").toBoolean()).isFalse();
+		assertThat(Any.from(true).val(false)).isTrue();
+		assertThat(Any.from(false).val(false)).isFalse();
+		assertThat(Any.from((Boolean)null).val(false)).isFalse();
+		assertThat(Any.from("   ").val(false)).isFalse();
+		assertThat(Any.from(" true ").val(false)).isTrue();
+		assertThat(Any.from(" FALSE ").val(false)).isFalse();
+		assertThat(Any.from("").val(false)).isFalse();
 	}
 
 	@Test
@@ -49,8 +50,8 @@ public class AnyTest {
 		assertThat(list.values()).containsExactlyElementsOf(nil.values());
 		assertThat(list.keys()).containsExactlyElementsOf(nil.keys());
 		assertThat(list.toString()).isEqualTo(nil.toString());
-		assertThat(list.toBoolean()).isEqualTo(nil.toBoolean());
-		assertThat(list.toBigDecimal()).isEqualTo(nil.toBigDecimal());
+		assertThat(list.val(false)).isEqualTo(nil.val(false));
+		assertThat(list.val(BigDecimal.ZERO)).isEqualTo(nil.val(BigDecimal.ZERO));
 		assertThat(list.get("x").toString()).isEqualTo(nil.get("x").toString());
 		assertThat(list.get((String) null).toString()).isEqualTo(nil.get((String) null).toString());
 		assertThat(list.get("  ").toString()).isEqualTo(nil.get("  ").toString());
@@ -60,16 +61,16 @@ public class AnyTest {
 	@Test
 	public void should_handle_lists_containing_values() {
 		Any list = Any.list(l -> {
-			l.put(Any.scalar("1"));
-			l.put(Any.scalar("2"));
+			l.put(Any.from("1"));
+			l.put(Any.from("2"));
 		});
 
 		assertThat(list.count()).isEqualTo(2);
 		assertThat(list.values()).extracting(Any::toString).containsExactly("1", "2");
 		assertThat(list.keys()).isEmpty();
 		assertThat(list.toString()).isEqualTo("1");
-		assertThat(list.toBoolean()).isFalse();
-		assertThat(list.toBigDecimal()).isEqualByComparingTo(new BigDecimal("1"));
+		assertThat(list.val(false)).isFalse();
+		assertThat(list.val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("1"));
 		assertThat(list.get(-1).toString()).isEmpty();
 		assertThat(list.get(0).toString()).isEqualTo("1");
 		assertThat(list.get(1).toString()).isEqualTo("2");
@@ -86,8 +87,8 @@ public class AnyTest {
 		assertThat(map.values()).containsExactlyElementsOf(nil.values());
 		assertThat(map.keys()).containsExactlyElementsOf(nil.keys());
 		assertThat(map.toString()).isEqualTo(nil.toString());
-		assertThat(map.toBoolean()).isEqualTo(nil.toBoolean());
-		assertThat(map.toBigDecimal()).isEqualTo(nil.toBigDecimal());
+		assertThat(map.val(false)).isEqualTo(nil.val(false));
+		assertThat(map.val(BigDecimal.ZERO)).isEqualTo(nil.val(BigDecimal.ZERO));
 		assertThat(map.get("x").toString()).isEqualTo(nil.get("x").toString());
 		assertThat(map.get((String) null).toString()).isEqualTo(nil.get((String) null).toString());
 		assertThat(map.get("  ").toString()).isEqualTo(nil.get("  ").toString());
@@ -97,16 +98,16 @@ public class AnyTest {
 	@Test
 	public void should_handle_map_containing_values() {
 		Any map = Any.map(x -> {
-			x.put("k1", Any.scalar("1"));
-			x.put("CAPITAL", Any.scalar("2"));
-			x.put(" k3 ", Any.scalar("3"));
+			x.put("k1", Any.from("1"));
+			x.put("CAPITAL", Any.from("2"));
+			x.put(" k3 ", Any.from("3"));
 		});
 		assertThat(map.count()).isEqualTo(3);
 		assertThat(map.values()).extracting(Any::toString).containsExactly("2", "1", "3");
 		assertThat(map.keys()).containsExactly("CAPITAL", "k1", "k3");
 		assertThat(map.toString()).isEqualTo("2");
-		assertThat(map.toBoolean()).isFalse();
-		assertThat(map.toBigDecimal()).isEqualByComparingTo(new BigDecimal("2"));
+		assertThat(map.val(false)).isFalse();
+		assertThat(map.val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("2"));
 		assertThat(map.get("x").toString()).isEmpty();
 		assertThat(map.get((String) null).toString()).isEmpty();
 		assertThat(map.get("  ").toString()).isEmpty();
@@ -118,8 +119,8 @@ public class AnyTest {
 	@Test
 	public void maps_should_act_as_lists() {
 		Any map = Any.map(x -> {
-			x.put("0", Any.scalar("zero"));
-			x.put("2", Any.scalar("two"));
+			x.put("0", Any.from("zero"));
+			x.put("2", Any.from("two"));
 		});
 
 		assertThat(map.get(0).toString()).isEqualTo("zero");
@@ -131,8 +132,8 @@ public class AnyTest {
 	@Test
 	public void lists_should_get_by_string() {
 		Any map = Any.list(x -> {
-			x.put(Any.scalar("zero"));
-			x.put(Any.scalar("one"));
+			x.put(Any.from("zero"));
+			x.put(Any.from("one"));
 		});
 
 		assertThat(map.get("0").toString()).isEqualTo("zero");
@@ -145,9 +146,9 @@ public class AnyTest {
 	public void should_collect_all_values_for_the_same_key() {
 		Any any = Any.map(b -> {
 			b.put("k", Any.NULL);
-			b.put("k", Any.scalar("v1"));
+			b.put("k", Any.from("v1"));
 			b.put("k", Any.NULL);
-			b.put("k", Any.scalar("v2"));
+			b.put("k", Any.from("v2"));
 			b.put("k", Any.NULL);
 		});
 
@@ -164,7 +165,7 @@ public class AnyTest {
 		Any any = Any.list(b -> {
 			b.put(Any.NULL);
 			b.put(Any.NULL);
-			b.put(Any.scalar("val"));
+			b.put(Any.from("val"));
 			b.put(Any.NULL);
 			b.put(Any.NULL);
 		});
@@ -177,28 +178,28 @@ public class AnyTest {
 
 	@Test
 	public void should_handle_localdate_scalar() {
-		assertThat(Any.scalar(LocalDate.of(2015, 12, 2)).count()).isEqualTo(1);
-		assertThat(Any.scalar(LocalDate.of(2015, 12, 2)).toLocalDate()).isEqualTo(LocalDate.of(2015, 12, 2));
-		assertThat(Any.scalar((LocalDate) null).count()).isZero();
-		assertThat(Any.scalar((LocalDate) null).toLocalDate()).isEqualTo(LocalDate.MIN);
-		assertThat(Any.scalar("2015-12-02").toLocalDate()).isEqualTo(LocalDate.of(2015, 12, 2));
+		assertThat(Any.from(LocalDate.of(2015, 12, 2)).count()).isEqualTo(1);
+		assertThat(Any.from(LocalDate.of(2015, 12, 2)).val(LocalDate.MIN)).isEqualTo(LocalDate.of(2015, 12, 2));
+		assertThat(Any.from((LocalDate) null).count()).isZero();
+		assertThat(Any.from((LocalDate) null).val(LocalDate.MIN)).isEqualTo(LocalDate.MIN);
+		assertThat(Any.from("2015-12-02").val(LocalDate.MIN)).isEqualTo(LocalDate.of(2015, 12, 2));
 	}
 
 	@Test
 	public void should_handle_localtime_scalar() {
-		assertThat(Any.scalar(LocalTime.of(19, 30, 40)).count()).isEqualTo(1);
-		assertThat(Any.scalar(LocalTime.of(19, 30, 40)).toLocalTime()).isEqualTo(LocalTime.of(19, 30, 40));
-		assertThat(Any.scalar((LocalTime) null).count()).isZero();
-		assertThat(Any.scalar((LocalTime) null).toLocalTime()).isEqualTo(LocalTime.MIN);
-		assertThat(Any.scalar("19:30:40").toLocalTime()).isEqualTo(LocalTime.of(19, 30, 40));
+		assertThat(Any.from(LocalTime.of(19, 30, 40)).count()).isEqualTo(1);
+		assertThat(Any.from(LocalTime.of(19, 30, 40)).val(LocalTime.MIN)).isEqualTo(LocalTime.of(19, 30, 40));
+		assertThat(Any.from((LocalTime) null).count()).isZero();
+		assertThat(Any.from((LocalTime) null).val(LocalTime.MIN)).isEqualTo(LocalTime.MIN);
+		assertThat(Any.from("19:30:40").val(LocalTime.MIN)).isEqualTo(LocalTime.of(19, 30, 40));
 	}
 
 	@Test
 	public void should_handle_localdatetime_scalar() {
-		assertThat(Any.scalar(LocalDateTime.of(2015, 12, 2, 19, 30, 40)).count()).isEqualTo(1);
-		assertThat(Any.scalar(LocalDateTime.of(2015, 12, 2, 19, 30, 40)).toLocalDateTime()).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
-		assertThat(Any.scalar((LocalDateTime) null).count()).isZero();
-		assertThat(Any.scalar((LocalDateTime) null).toLocalDateTime()).isEqualTo(LocalDateTime.MIN);
-		assertThat(Any.scalar("2015-12-02T19:30:40").toLocalDateTime()).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
+		assertThat(Any.from(LocalDateTime.of(2015, 12, 2, 19, 30, 40)).count()).isEqualTo(1);
+		assertThat(Any.from(LocalDateTime.of(2015, 12, 2, 19, 30, 40)).val(LocalDateTime.MIN)).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
+		assertThat(Any.from((LocalDateTime) null).count()).isZero();
+		assertThat(Any.from((LocalDateTime) null).val(LocalDateTime.MIN)).isEqualTo(LocalDateTime.MIN);
+		assertThat(Any.from("2015-12-02T19:30:40").val(LocalDateTime.MIN)).isEqualTo(LocalDateTime.of(2015, 12, 2, 19, 30, 40));
 	}
 }
