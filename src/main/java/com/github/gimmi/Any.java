@@ -119,15 +119,16 @@ public class Any {
 	}
 
 	public Optional<String> val() {
-		return Optional.ofNullable(getScalar(null));
+		return Optional.ofNullable(getScalar());
 	}
 
 	public String val(String def) {
-		return getScalar(def);
+		String val = getScalar();
+		return val == null ? def : val;
 	}
 
 	public BigDecimal val(BigDecimal def) {
-		String v = getScalar(null);
+		String v = getScalar();
 		if (v == null) {
 			return def;
 		}
@@ -135,7 +136,7 @@ public class Any {
 	}
 
 	public Integer val(Integer def) {
-		String v = getScalar(null);
+		String v = getScalar();
 		if (v == null) {
 			return def;
 		}
@@ -143,7 +144,7 @@ public class Any {
 	}
 
 	public Boolean val(Boolean def) {
-		String v = getScalar(null);
+		String v = getScalar();
 		if (v == null) {
 			return def;
 		}
@@ -151,7 +152,7 @@ public class Any {
 	}
 
 	public LocalDate val(LocalDate def) {
-		String v = getScalar(null);
+		String v = getScalar();
 		if (v == null) {
 			return def;
 		}
@@ -159,7 +160,7 @@ public class Any {
 	}
 
 	public LocalTime val(LocalTime def) {
-		String v = getScalar(null);
+		String v = getScalar();
 		if (v == null) {
 			return def;
 		}
@@ -167,7 +168,7 @@ public class Any {
 	}
 
 	public LocalDateTime val(LocalDateTime def) {
-		String v = getScalar(null);
+		String v = getScalar();
 		if (v == null) {
 			return def;
 		}
@@ -175,7 +176,7 @@ public class Any {
 	}
 
 	public <T> T val(Function<String, T> converter) {
-		return converter.apply(getScalar(null));
+		return converter.apply(getScalar());
 	}
 
 	public Iterable<String> keys() {
@@ -196,14 +197,10 @@ public class Any {
 		return Collections.emptyList();
 	}
 
-	private String getScalar(String def) {
-		if (map != null && map.size() > 0) {
-			return map.firstEntry().getValue().scalar;
-		} else if (list != null && list.size() > 0) {
+	private String getScalar() {
+		if (list != null && list.size() > 0) {
 			return list.get(0).scalar;
-		} else if (scalar != null) {
-			return scalar;
 		}
-		return def;
+		return scalar;
 	}
 }

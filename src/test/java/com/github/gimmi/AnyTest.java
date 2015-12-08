@@ -23,7 +23,7 @@ public class AnyTest {
 	public void should_handle_number_scalar() {
 		assertThat(Any.of(BigDecimal.valueOf(0)).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(0));
 		Any any1 = Any.map(x -> x.put("key", Any.of("3.14")));
-		assertThat(any1.val(BigDecimal.ZERO)).isEqualTo(new BigDecimal("3.14"));
+		assertThat(any1.val(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
 		Any any = Any.list(x -> x.put(Any.of("3.14")));
 		assertThat(any.val(BigDecimal.ZERO)).isEqualTo(new BigDecimal("3.14"));
 		assertThat(Any.of(BigDecimal.valueOf(314, 2)).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(314, 2));
@@ -105,9 +105,9 @@ public class AnyTest {
 		assertThat(map.count()).isEqualTo(3);
 		assertThat(map.values()).extracting(Any::toString).containsExactly("2", "1", "3");
 		assertThat(map.keys()).containsExactly("CAPITAL", "k1", "k3");
-		assertThat(map.toString()).isEqualTo("2");
+		assertThat(map.toString()).isEmpty();
 		assertThat(map.val(false)).isFalse();
-		assertThat(map.val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("2"));
+		assertThat(map.val(BigDecimal.ZERO)).isEqualByComparingTo(BigDecimal.ZERO);
 		assertThat(map.key("x").toString()).isEmpty();
 		assertThat(map.key((String) null).toString()).isEmpty();
 		assertThat(map.key("  ").toString()).isEmpty();
