@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 import static com.github.gimmi.Utils.stripToNull;
 
@@ -173,10 +175,6 @@ public class Any {
 			return def;
 		}
 		return LocalDateTime.parse(v);
-	}
-
-	public <T> T val(Function<String, T> converter) {
-		return converter.apply(getScalar());
 	}
 
 	public Iterable<String> keys() {
