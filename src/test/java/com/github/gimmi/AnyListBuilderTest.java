@@ -16,7 +16,7 @@ public class AnyListBuilderTest {
 		b.put(Any.NULL);
 		assertThat(b.count()).isZero();
 		assertThat(b.build().count()).isZero();
-		b.put(Any.from("val"));
+		b.put(Any.of("val"));
 		assertThat(b.count()).isEqualTo(3);
 		assertThat(b.build().count()).isEqualTo(3);
 		b.put(Any.NULL);

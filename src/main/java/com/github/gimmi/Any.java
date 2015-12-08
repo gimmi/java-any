@@ -13,42 +13,42 @@ import static com.github.gimmi.Utils.stripToNull;
 public class Any {
 	public static final Any NULL = new Any(null, null, null);
 
-	public static Any from(BigDecimal value) {
+	public static Any of(BigDecimal value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toPlainString(), null, null);
 	}
 
-	public static Any from(Boolean value) {
+	public static Any of(Boolean value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any from(LocalDate value) {
+	public static Any of(LocalDate value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any from(LocalTime value) {
+	public static Any of(LocalTime value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any from(LocalDateTime value) {
+	public static Any of(LocalDateTime value) {
 		if (value == null) {
 			return Any.NULL;
 		}
 		return new Any(value.toString(), null, null);
 	}
 
-	public static Any from(String value) {
+	public static Any of(String value) {
 		value = stripToNull(value);
 		if (value == null) {
 			return Any.NULL;

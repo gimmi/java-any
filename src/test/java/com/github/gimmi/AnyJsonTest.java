@@ -67,10 +67,10 @@ public class AnyJsonTest {
 	@Test
 	public void should_serialize_complex_obj() {
 		String json = AnyJson.toJson(Any.map(b -> {
-			b.put("strProp", Any.from("val"));
-			b.put("numProp", Any.from(new BigDecimal("-3.14e2")));
-			b.put("trueProp", Any.from(true));
-			b.put("falseProp", Any.from(false));
+			b.put("strProp", Any.of("val"));
+			b.put("numProp", Any.of(new BigDecimal("-3.14e2")));
+			b.put("trueProp", Any.of(true));
+			b.put("falseProp", Any.of(false));
 			b.put("nullProp", Any.NULL);
 			b.put("emptyAry", Any.list(bb -> {}));
 			b.put("emptyObj", Any.map(bb -> {}));
@@ -78,19 +78,19 @@ public class AnyJsonTest {
 				bb.put(Any.NULL);
 				bb.put(Any.list(bbb -> {}));
 				bb.put(Any.map(bbb -> {}));
-				bb.put(Any.from("val"));
-				bb.put(Any.from(new BigDecimal("-3.14e2")));
-				bb.put(Any.from(true));
-				bb.put(Any.from(false));
+				bb.put(Any.of("val"));
+				bb.put(Any.of(new BigDecimal("-3.14e2")));
+				bb.put(Any.of(true));
+				bb.put(Any.of(false));
 				bb.put(Any.NULL);
 				bb.put(Any.list(bbb -> {}));
 				bb.put(Any.map(bbb -> {}));
 			}));
 			b.put("objProp", Any.map(bb -> {
-				bb.put("strProp", Any.from("val"));
-				bb.put("numProp", Any.from(new BigDecimal("-3.14e2")));
-				bb.put("trueProp", Any.from(true));
-				bb.put("falseProp", Any.from(false));
+				bb.put("strProp", Any.of("val"));
+				bb.put("numProp", Any.of(new BigDecimal("-3.14e2")));
+				bb.put("trueProp", Any.of(true));
+				bb.put("falseProp", Any.of(false));
 				bb.put("nullProp", Any.NULL);
 				bb.put("emptyAry", Any.list(bbb -> {}));
 				bb.put("emptyObj", Any.map(bbb -> {}));
@@ -102,13 +102,13 @@ public class AnyJsonTest {
 
 	@Test
 	public void should_serialize_special_chars() {
-		assertThat(AnyJson.toJson(Any.from("-\"-"))).isEqualTo("\"-\\\"-\"");
-		assertThat(AnyJson.toJson(Any.from("-/-"))).isEqualTo("\"-\\/-\"");
-		assertThat(AnyJson.toJson(Any.from("-\b-"))).isEqualTo("\"-\\b-\"");
-		assertThat(AnyJson.toJson(Any.from("-\f-"))).isEqualTo("\"-\\f-\"");
-		assertThat(AnyJson.toJson(Any.from("-\n-"))).isEqualTo("\"-\\n-\"");
-		assertThat(AnyJson.toJson(Any.from("-\t-"))).isEqualTo("\"-\\t-\"");
-		assertThat(AnyJson.toJson(Any.from("-\r-"))).isEqualTo("\"-\\r-\"");
+		assertThat(AnyJson.toJson(Any.of("-\"-"))).isEqualTo("\"-\\\"-\"");
+		assertThat(AnyJson.toJson(Any.of("-/-"))).isEqualTo("\"-\\/-\"");
+		assertThat(AnyJson.toJson(Any.of("-\b-"))).isEqualTo("\"-\\b-\"");
+		assertThat(AnyJson.toJson(Any.of("-\f-"))).isEqualTo("\"-\\f-\"");
+		assertThat(AnyJson.toJson(Any.of("-\n-"))).isEqualTo("\"-\\n-\"");
+		assertThat(AnyJson.toJson(Any.of("-\t-"))).isEqualTo("\"-\\t-\"");
+		assertThat(AnyJson.toJson(Any.of("-\r-"))).isEqualTo("\"-\\r-\"");
 	}
 
 	@Test

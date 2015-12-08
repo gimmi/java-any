@@ -13,13 +13,13 @@ public class AnyMapBuilderTest {
 		b.put("k1", Any.NULL);
 		assertThat(b.count()).isZero();
 		assertThat(b.build().count()).isZero();
-		b.put("k1", Any.from("val1"));
+		b.put("k1", Any.of("val1"));
 		assertThat(b.count()).isEqualTo(1);
 		assertThat(b.build().count()).isEqualTo(1);
-		b.put("K1", Any.from("val2"));
+		b.put("K1", Any.of("val2"));
 		assertThat(b.count()).isEqualTo(1);
 		assertThat(b.build().count()).isEqualTo(1);
-		b.put("k2", Any.from("val3"));
+		b.put("k2", Any.of("val3"));
 		assertThat(b.count()).isEqualTo(2);
 		assertThat(b.build().count()).isEqualTo(2);
 	}
