@@ -122,4 +122,14 @@ public class AnyJsonTest {
 		assertThat(AnyJson.fromJson("\"-\\r-\"").toString()).isEqualTo("-\r-");
 		assertThat(AnyJson.fromJson("\"-\\u0058-\"").toString()).isEqualTo("-X-");
 	}
+
+	@Test
+	public void should_serialize_nulls_as_empty_strings() {
+		assertThat(AnyJson.toJson(Any.NULL)).isEqualTo("\"\"");
+
+		assertThat(AnyJson.toJson(Any.list(b -> {
+			b.put(Any.NULL);
+			b.put(Any.of("abc"));
+		}))).isEqualTo("[\"\",\"abc\"]");
+	}
 }
