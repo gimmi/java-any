@@ -20,7 +20,7 @@ public class AnyTest {
 	}
 
 	@Test
-	public void should_handle_number_scalar() {
+	public void should_handle_bigdecimal_scalar() {
 		assertThat(Any.of(BigDecimal.valueOf(0)).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(0));
 		Any any1 = Any.map(x -> x.put("key", Any.of("3.14")));
 		assertThat(any1.val(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
@@ -29,6 +29,18 @@ public class AnyTest {
 		assertThat(Any.of(BigDecimal.valueOf(314, 2)).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(314, 2));
 		assertThat(Any.of((BigDecimal) null).val(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
 		assertThat(Any.of("   ").val(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
+	}
+
+	@Test
+	public void should_handle_integer_scalar() {
+		assertThat(Any.of(0).val(-1)).isZero();
+		Any map = Any.map(x -> x.put("key", Any.of("314")));
+		assertThat(map.val(-1)).isEqualTo(-1);
+		Any list = Any.list(x -> x.put(Any.of("314")));
+		assertThat(list.val(0)).isEqualTo(314);
+		assertThat(Any.of((Integer) null).val(-1)).isEqualTo(-1);
+		assertThat(Any.of("   ").val(-1)).isEqualTo(-1);
+		assertThat(Any.of(-314).val(0)).isEqualTo(-314);
 	}
 
 	@Test
@@ -43,6 +55,14 @@ public class AnyTest {
 	}
 
 	@Test
+	public void should_return_optional_when_no_default_specified() {
+		assertThat(Any.of("abc").val().isPresent()).isTrue();
+		assertThat(Any.of("abc").val().get()).isEqualTo("abc");
+		assertThat(Any.of((String)null).val().isPresent()).isFalse();
+		assertThat(Any.of("  ").val().isPresent()).isFalse();
+	}
+
+	@Test
 	public void should_handle_empty_lists_like_null_objects() {
 		Any list = Any.list(l -> {});
 		Any nil = Any.NULL;
@@ -53,7 +73,7 @@ public class AnyTest {
 		assertThat(list.val(false)).isEqualTo(nil.val(false));
 		assertThat(list.val(BigDecimal.ZERO)).isEqualTo(nil.val(BigDecimal.ZERO));
 		assertThat(list.key("x").toString()).isEqualTo(nil.key("x").toString());
-		assertThat(list.key((String) null).toString()).isEqualTo(nil.key((String) null).toString());
+		assertThat(list.key(null).toString()).isEqualTo(nil.key(null).toString());
 		assertThat(list.key("  ").toString()).isEqualTo(nil.key("  ").toString());
 		assertThat(list.at(0).toString()).isEqualTo(nil.at(0).toString());
 	}

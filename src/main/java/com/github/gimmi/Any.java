@@ -22,6 +22,13 @@ public class Any {
 		return new Any(value.toPlainString(), null, null);
 	}
 
+	public static Any of(Integer value) {
+		if (value == null) {
+			return Any.NULL;
+		}
+		return new Any(value.toString(), null, null);
+	}
+
 	public static Any of(Boolean value) {
 		if (value == null) {
 			return Any.NULL;
