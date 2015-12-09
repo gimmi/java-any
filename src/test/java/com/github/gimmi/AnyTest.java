@@ -12,11 +12,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class AnyTest {
 	@Test
 	public void should_handle_string_scalar() {
-		assertThat(Any.of("hello world").toString()).isEqualTo("hello world");
-		assertThat(Any.of((String) null).toString()).isEqualTo("");
-		assertThat(Any.of("  ").toString()).isEqualTo("");
-		assertThat(Any.of(" x ").toString()).isEqualTo("x");
-		assertThat(Any.of("\n\trow1\n\trow2\n").toString()).isEqualTo("row1\n\trow2");
+		assertThat(Any.of("hello world").val("")).isEqualTo("hello world");
+		assertThat(Any.of((String) null).val("")).isEqualTo("");
+		assertThat(Any.of("  ").val("")).isEqualTo("");
+		assertThat(Any.of(" x ").val("")).isEqualTo("x");
+		assertThat(Any.of("\n\trow1\n\trow2\n").val("")).isEqualTo("row1\n\trow2");
 	}
 
 	@Test
