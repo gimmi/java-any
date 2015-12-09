@@ -110,7 +110,7 @@ public class AnyTest {
 		assertThat(map.val(false)).isEqualTo(nil.val(false));
 		assertThat(map.val(BigDecimal.ZERO)).isEqualTo(nil.val(BigDecimal.ZERO));
 		assertThat(map.key("x").toString()).isEqualTo(nil.key("x").toString());
-		assertThat(map.key((String) null).toString()).isEqualTo(nil.key((String) null).toString());
+		assertThat(map.key(null).toString()).isEqualTo(nil.key(null).toString());
 		assertThat(map.key("  ").toString()).isEqualTo(nil.key("  ").toString());
 		assertThat(map.at(0).toString()).isEqualTo(nil.at(0).toString());
 	}
@@ -129,7 +129,7 @@ public class AnyTest {
 		assertThat(map.val(false)).isFalse();
 		assertThat(map.val(BigDecimal.ZERO)).isEqualByComparingTo(BigDecimal.ZERO);
 		assertThat(map.key("x").toString()).isEmpty();
-		assertThat(map.key((String) null).toString()).isEmpty();
+		assertThat(map.key(null).toString()).isEmpty();
 		assertThat(map.key("  ").toString()).isEmpty();
 		assertThat(map.at(0).toString()).isEmpty();
 		assertThat(map.key("  k1  ").toString()).isEqualTo("1");
