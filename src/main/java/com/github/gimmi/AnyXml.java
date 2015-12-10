@@ -11,6 +11,7 @@ import javax.xml.parsers.SAXParserFactory;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.util.Stack;
 
 public class AnyXml {
@@ -26,8 +27,10 @@ public class AnyXml {
 			Handler handler = new Handler();
 			saxParser.parse(new InputSource(reader), handler);
 			return handler.any;
-		} catch (ParserConfigurationException | SAXException | IOException e) {
-			throw new RuntimeException("Erro parsing XML", e);
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		} catch (ParserConfigurationException | SAXException e) {
+			throw new RuntimeException("Error parsing XML", e);
 		}
 	}
 

@@ -110,7 +110,7 @@ public class AnyJson {
 				writeJsonString(any.toString(), w);
 			}
 		} catch (IOException e) {
-			throw new RuntimeException("Unable to serialize as JSON", e);
+			throw new UncheckedIOException("Unable to serialize as JSON", e);
 		}
 	}
 
@@ -223,7 +223,7 @@ public class AnyJson {
 		try {
 			writer.write(c);
 		} catch (IOException e) {
-			throw new RuntimeException("Unable to write JSON", e);
+			throw new UncheckedIOException("Unable to write JSON", e);
 		}
 	}
 
@@ -231,7 +231,7 @@ public class AnyJson {
 		try {
 			writer.write(str);
 		} catch (IOException e) {
-			throw new RuntimeException("Unable to write JSON", e);
+			throw new UncheckedIOException("Unable to write JSON", e);
 		}
 	}
 }
