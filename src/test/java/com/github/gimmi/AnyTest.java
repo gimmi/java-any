@@ -6,7 +6,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AnyTest {
@@ -208,5 +210,31 @@ public class AnyTest {
 		assertThat(scalar.at(1)).isSameAs(list.at(1));
 		assertThat(scalar.key("0")).isSameAs(list.key("0"));
 		assertThat(scalar.key("other")).isSameAs(list.key("other"));
+	}
+
+	@Test
+	public void should_iterate_using_stream() {
+		Any map = Any.map(b -> {
+			b.put("a", Any.of(1));
+			b.put("b", Any.of(2));
+			b.put("c", Any.of(3));
+		});
+
+		assertThat(map.keyStream().collect(toList())).containsExactly("a", "b", "c");
+		assertThat(map.valueStream().map(x -> x.val(0)).collect(toList())).containsExactly(1, 2, 3);
+
+		Any list = Any.list(b -> {
+			b.put(Any.of(1));
+			b.put(Any.of(2));
+			b.put(Any.of(3));
+		});
+
+		assertThat(list.keyStream().collect(toList())).isEmpty();
+		assertThat(list.valueStream().map(x -> x.val(0)).collect(toList())).containsExactly(1, 2, 3);
+
+		Any scalar = Any.of(1);
+
+		assertThat(scalar.keyStream().collect(toList())).isEmpty();
+		assertThat(scalar.valueStream().map(x -> x.val(0)).collect(toList())).containsExactly(1);
 	}
 }

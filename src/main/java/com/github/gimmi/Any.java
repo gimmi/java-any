@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.TreeMap;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 import static com.github.gimmi.Utils.stripToNull;
 
@@ -191,6 +192,13 @@ public class Any {
 		return Collections.emptySet();
 	}
 
+	public Stream<String> keyStream() {
+		if (map != null) {
+			return map.keySet().stream();
+		}
+		return Stream.empty();
+	}
+
 	public Iterable<Any> values() {
 		if (map != null) {
 			return map.values();
@@ -200,6 +208,17 @@ public class Any {
 			return Collections.singletonList(this);
 		}
 		return Collections.emptyList();
+	}
+
+	public Stream<Any> valueStream() {
+		if (map != null) {
+			return map.values().stream();
+		} else if (list != null) {
+			return list.stream();
+		} else if (scalar != null) {
+			return Stream.of(this);
+		}
+		return Stream.empty();
 	}
 
 	private String getScalar() {
