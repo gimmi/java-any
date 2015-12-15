@@ -1,5 +1,9 @@
 package com.github.gimmi;
 
+import java.time.LocalDateTime;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 class Utils {
 	private static final int INDEX_NOT_FOUND = -1;
 	private static final String EMPTY = "";
@@ -160,5 +164,24 @@ class Utils {
 			}
 		}
 		return str.substring(0, end);
+	}
+
+	public static LocalDateTime parseTime(String val) {
+		Pattern pattern = Pattern.compile("\\d+");
+		Matcher matcher = pattern.matcher(val);
+		LocalDateTime ret = LocalDateTime.of(0, 1, 1, 0, 0, 0);
+		if (!matcher.find()) return ret;
+		ret = ret.plusYears(Integer.valueOf(matcher.group()));
+		if (!matcher.find()) return ret;
+		ret = ret.plusMonths(Integer.valueOf(matcher.group()) - 1);
+		if (!matcher.find()) return ret;
+		ret = ret.plusDays(Integer.valueOf(matcher.group()) - 1);
+		if (!matcher.find()) return ret;
+		ret = ret.plusHours(Integer.valueOf(matcher.group()));
+		if (!matcher.find()) return ret;
+		ret = ret.plusMinutes(Integer.valueOf(matcher.group()));
+		if (!matcher.find()) return ret;
+		ret = ret.plusSeconds(Integer.valueOf(matcher.group()));
+		return ret;
 	}
 }

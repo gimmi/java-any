@@ -44,4 +44,16 @@ public class UtilsTest {
 		assertThat(Utils.toBoolean("t")).isTrue();
 		assertThat(Utils.toBoolean("f")).isFalse();
 	}
+
+
+	@Test
+	public void should_parse_time() {
+		assertThat(Utils.parseTime("2015").toString()).isEqualTo("2015-01-01T00:00");
+		assertThat(Utils.parseTime("2015-12").toString()).isEqualTo("2015-12-01T00:00");
+		assertThat(Utils.parseTime("2015-12-15").toString()).isEqualTo("2015-12-15T00:00");
+		assertThat(Utils.parseTime("2015-12-15T20").toString()).isEqualTo("2015-12-15T20:00");
+		assertThat(Utils.parseTime("2015-12-15T20:30").toString()).isEqualTo("2015-12-15T20:30");
+		assertThat(Utils.parseTime("2015-12-15T20:30").toString()).isEqualTo("2015-12-15T20:30");
+		assertThat(Utils.parseTime("2015/12/15 at 20.30").toString()).isEqualTo("2015-12-15T20:30");
+	}
 }
