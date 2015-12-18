@@ -1,12 +1,20 @@
 package com.github.gimmi;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnyJsonTest {
+public class AnyJsonSerializerTest {
+	private AnyJsonSerializer sut;
+
+	@Before
+	public void before() {
+		sut = new AnyJsonSerializer();
+	}
+
 	@Test
 	public void should_parse_complex_json() {
 		String json = String.join("",
@@ -42,7 +50,7 @@ public class AnyJsonTest {
 			"}"
 		).replace('\'', '"');
 
-		Any any = AnyJson.fromJson(json);
+		Any any = sut.fromJson(json);
 
 		assertThat(any.count()).isEqualTo(6);
 		assertThat(any.key("strProp").toString()).isEqualTo("val");
@@ -66,7 +74,7 @@ public class AnyJsonTest {
 
 	@Test
 	public void should_serialize_complex_obj() {
-		String json = AnyJson.toJson(Any.map(b -> {
+		String json = sut.toJson(Any.map(b -> {
 			b.put("strProp", Any.of("val"));
 			b.put("numProp", Any.of(new BigDecimal("-3.14e2")));
 			b.put("trueProp", Any.of(true));
@@ -102,32 +110,32 @@ public class AnyJsonTest {
 
 	@Test
 	public void should_serialize_special_chars() {
-		assertThat(AnyJson.toJson(Any.of("-\"-"))).isEqualTo("\"-\\\"-\"");
-		assertThat(AnyJson.toJson(Any.of("-/-"))).isEqualTo("\"-\\/-\"");
-		assertThat(AnyJson.toJson(Any.of("-\b-"))).isEqualTo("\"-\\b-\"");
-		assertThat(AnyJson.toJson(Any.of("-\f-"))).isEqualTo("\"-\\f-\"");
-		assertThat(AnyJson.toJson(Any.of("-\n-"))).isEqualTo("\"-\\n-\"");
-		assertThat(AnyJson.toJson(Any.of("-\t-"))).isEqualTo("\"-\\t-\"");
-		assertThat(AnyJson.toJson(Any.of("-\r-"))).isEqualTo("\"-\\r-\"");
+		assertThat(sut.toJson(Any.of("-\"-"))).isEqualTo("\"-\\\"-\"");
+		assertThat(sut.toJson(Any.of("-/-"))).isEqualTo("\"-\\/-\"");
+		assertThat(sut.toJson(Any.of("-\b-"))).isEqualTo("\"-\\b-\"");
+		assertThat(sut.toJson(Any.of("-\f-"))).isEqualTo("\"-\\f-\"");
+		assertThat(sut.toJson(Any.of("-\n-"))).isEqualTo("\"-\\n-\"");
+		assertThat(sut.toJson(Any.of("-\t-"))).isEqualTo("\"-\\t-\"");
+		assertThat(sut.toJson(Any.of("-\r-"))).isEqualTo("\"-\\r-\"");
 	}
 
 	@Test
 	public void should_deserialize_special_chars() {
-		assertThat(AnyJson.fromJson("\"-\\\"-\"").toString()).isEqualTo("-\"-");
-		assertThat(AnyJson.fromJson("\"-\\/-\"").toString()).isEqualTo("-/-");
-		assertThat(AnyJson.fromJson("\"-\\b-\"").toString()).isEqualTo("-\b-");
-		assertThat(AnyJson.fromJson("\"-\\f-\"").toString()).isEqualTo("-\f-");
-		assertThat(AnyJson.fromJson("\"-\\n-\"").toString()).isEqualTo("-\n-");
-		assertThat(AnyJson.fromJson("\"-\\t-\"").toString()).isEqualTo("-\t-");
-		assertThat(AnyJson.fromJson("\"-\\r-\"").toString()).isEqualTo("-\r-");
-		assertThat(AnyJson.fromJson("\"-\\u0058-\"").toString()).isEqualTo("-X-");
+		assertThat(sut.fromJson("\"-\\\"-\"").toString()).isEqualTo("-\"-");
+		assertThat(sut.fromJson("\"-\\/-\"").toString()).isEqualTo("-/-");
+		assertThat(sut.fromJson("\"-\\b-\"").toString()).isEqualTo("-\b-");
+		assertThat(sut.fromJson("\"-\\f-\"").toString()).isEqualTo("-\f-");
+		assertThat(sut.fromJson("\"-\\n-\"").toString()).isEqualTo("-\n-");
+		assertThat(sut.fromJson("\"-\\t-\"").toString()).isEqualTo("-\t-");
+		assertThat(sut.fromJson("\"-\\r-\"").toString()).isEqualTo("-\r-");
+		assertThat(sut.fromJson("\"-\\u0058-\"").toString()).isEqualTo("-X-");
 	}
 
 	@Test
 	public void should_serialize_nulls_as_empty_strings() {
-		assertThat(AnyJson.toJson(Any.NULL)).isEqualTo("\"\"");
+		assertThat(sut.toJson(Any.NULL)).isEqualTo("\"\"");
 
-		assertThat(AnyJson.toJson(Any.list(b -> {
+		assertThat(sut.toJson(Any.list(b -> {
 			b.put(Any.NULL);
 			b.put(Any.of("abc"));
 		}))).isEqualTo("[\"\",\"abc\"]");

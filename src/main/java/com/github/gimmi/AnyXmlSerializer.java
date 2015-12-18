@@ -14,12 +14,12 @@ import java.io.StringReader;
 import java.io.UncheckedIOException;
 import java.util.Stack;
 
-public class AnyXml {
-	public static Any fromXml(String xml) {
+public class AnyXmlSerializer {
+	public Any fromXml(String xml) {
 		return fromXml(new StringReader(xml));
 	}
 
-	public static Any fromXml(Reader reader) {
+	public Any fromXml(Reader reader) {
 		try {
 			SAXParserFactory factory = SAXParserFactory.newInstance();
 			factory.setNamespaceAware(true);

@@ -1,12 +1,21 @@
 package com.github.gimmi;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AnyXmlTest {
+public class AnyXmlSerializerTest {
+
+	private AnyXmlSerializer sut;
+
+	@Before
+	public void before() {
+		sut = new AnyXmlSerializer();
+	}
+
 	@Test
 	public void should_deserialize_xml() {
 		String xml = String.join("",
@@ -32,7 +41,7 @@ public class AnyXmlTest {
 			"</Root>"
 		).replace('\'', '"');
 
-		Any any = AnyXml.fromXml(xml);
+		Any any = sut.fromXml(xml);
 
 		assertThat(any.count()).isEqualTo(6);
 		assertThat(any.key("strProp").toString()).isEqualTo("val");
@@ -64,7 +73,7 @@ public class AnyXmlTest {
 			"</Root>"
 		).replace('\'', '"');
 
-		Any any = AnyXml.fromXml(xml);
+		Any any = sut.fromXml(xml);
 
 		assertThat(any.keys()).containsOnly("StrProp", "ObjProp");
 		assertThat(any.count()).isEqualTo(2);
@@ -76,7 +85,7 @@ public class AnyXmlTest {
 			"<Root attr1='val1' attr2='val2'>val3</Root>"
 		).replace('\'', '"');
 
-		Any any = AnyXml.fromXml(xml);
+		Any any = sut.fromXml(xml);
 
 		assertThat(any.keys()).containsOnly("attr1", "attr2", "text");
 		assertThat(any.key("attr1").toString()).isEqualTo("val1");

@@ -5,12 +5,12 @@ import java.util.Iterator;
 
 import static com.github.gimmi.Utils.stripToEmpty;
 
-public class AnyJson {
-	public static Any fromJson(String str) {
+public class AnyJsonSerializer {
+	public Any fromJson(String str) {
 		return fromJson(new StringReader(str));
 	}
 
-	public static Any fromJson(Reader reader) {
+	public Any fromJson(Reader reader) {
 		try {
 			if (!reader.markSupported()) {
 				reader = new BufferedReader(reader);
@@ -77,13 +77,13 @@ public class AnyJson {
 		}
 	}
 
-	public static String toJson(Any any) {
+	public String toJson(Any any) {
 		StringWriter writer = new StringWriter();
 		toJson(any, writer);
 		return writer.toString();
 	}
 
-	public static void toJson(Any any, Writer w) {
+	public void toJson(Any any, Writer w) {
 		try {
 			String comma = "";
 			Iterator<String> keys = any.keys().iterator();
