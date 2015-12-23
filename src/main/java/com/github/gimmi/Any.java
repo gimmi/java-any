@@ -123,11 +123,6 @@ public class Any {
 		return Any.NULL;
 	}
 
-	@Override
-	public String toString() {
-		return or("");
-	}
-
 	public Optional<String> val() {
 		return Optional.ofNullable(getScalar());
 	}
@@ -219,6 +214,18 @@ public class Any {
 			return Stream.of(this);
 		}
 		return Stream.empty();
+	}
+
+	@Override
+	public String toString() {
+		if (map != null) {
+			return map.toString();
+		} else if (list != null) {
+			return list.toString();
+		} else if (scalar != null) {
+			return scalar;
+		}
+		return "";
 	}
 
 	private String getScalar() {

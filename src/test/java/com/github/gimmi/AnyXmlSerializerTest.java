@@ -44,22 +44,22 @@ public class AnyXmlSerializerTest {
 		Any any = sut.fromXml(xml);
 
 		assertThat(any.count()).isEqualTo(6);
-		assertThat(any.key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("strProp").or("")).isEqualTo("val");
 		assertThat(any.key("numProp").or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat((boolean) any.key("trueProp").or(false)).isTrue();
 		assertThat((boolean) any.key("falseProp").or(false)).isFalse();
 		assertThat(any.key("aryProp").count()).isEqualTo(5);
-		assertThat(any.key("aryProp").at(0).toString()).isEmpty();
-		assertThat(any.key("aryProp").at(1).toString()).isEqualTo("val");
-		assertThat(any.key("aryProp").at(2).toString()).isEqualTo("-3.14e2");
-		assertThat(any.key("aryProp").at(3).toString()).isEqualTo("true");
-		assertThat(any.key("aryProp").at(4).toString()).isEqualTo("false");
+		assertThat(any.key("aryProp").at(0).or("")).isEmpty();
+		assertThat(any.key("aryProp").at(1).or("")).isEqualTo("val");
+		assertThat(any.key("aryProp").at(2).or("")).isEqualTo("-3.14e2");
+		assertThat(any.key("aryProp").at(3).or("")).isEqualTo("true");
+		assertThat(any.key("aryProp").at(4).or("")).isEqualTo("false");
 		assertThat(any.key("objProp").count()).isEqualTo(4);
 		assertThat(any.key("objProp").keys()).containsOnly("StrProp", "NumProp", "TrueProp", "FalseProp");
-		assertThat(any.key("objProp").key("strProp").toString()).isEqualTo("val");
-		assertThat(any.key("objProp").key("numProp").toString()).isEqualTo("-3.14e2");
-		assertThat(any.key("objProp").key("trueProp").toString()).isEqualTo("true");
-		assertThat(any.key("objProp").key("falseProp").toString()).isEqualTo("false");
+		assertThat(any.key("objProp").key("strProp").or("")).isEqualTo("val");
+		assertThat(any.key("objProp").key("numProp").or("")).isEqualTo("-3.14e2");
+		assertThat(any.key("objProp").key("trueProp").or("")).isEqualTo("true");
+		assertThat(any.key("objProp").key("falseProp").or("")).isEqualTo("false");
 	}
 
 	@Test
@@ -88,8 +88,8 @@ public class AnyXmlSerializerTest {
 		Any any = sut.fromXml(xml);
 
 		assertThat(any.keys()).containsOnly("attr1", "attr2", "text");
-		assertThat(any.key("attr1").toString()).isEqualTo("val1");
-		assertThat(any.key("attr2").toString()).isEqualTo("val2");
-		assertThat(any.key("text").toString()).isEqualTo("val3");
+		assertThat(any.key("attr1").or("")).isEqualTo("val1");
+		assertThat(any.key("attr2").or("")).isEqualTo("val2");
+		assertThat(any.key("text").or("")).isEqualTo("val3");
 	}
 }

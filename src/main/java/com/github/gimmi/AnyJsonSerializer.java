@@ -107,7 +107,7 @@ public class AnyJsonSerializer {
 				}
 				w.write(']');
 			} else {
-				writeJsonString(any.toString(), w);
+				writeJsonString(any.or(""), w);
 			}
 		} catch (IOException e) {
 			throw new UncheckedIOException("Unable to serialize as JSON", e);

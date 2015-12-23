@@ -70,13 +70,13 @@ public class AnyTest {
 		assertThat(list.count()).isEqualTo(nil.count());
 		assertThat(list.values()).containsExactlyElementsOf(nil.values());
 		assertThat(list.keys()).containsExactlyElementsOf(nil.keys());
-		assertThat(list.toString()).isEqualTo(nil.toString());
+		assertThat(list.or("")).isEqualTo(nil.or(""));
 		assertThat(list.or(false)).isEqualTo(nil.or(false));
 		assertThat(list.or(BigDecimal.ZERO)).isEqualTo(nil.or(BigDecimal.ZERO));
-		assertThat(list.key("x").toString()).isEqualTo(nil.key("x").toString());
-		assertThat(list.key(null).toString()).isEqualTo(nil.key(null).toString());
-		assertThat(list.key("  ").toString()).isEqualTo(nil.key("  ").toString());
-		assertThat(list.at(0).toString()).isEqualTo(nil.at(0).toString());
+		assertThat(list.key("x").or("")).isEqualTo(nil.key("x").or(""));
+		assertThat(list.key(null).or("")).isEqualTo(nil.key(null).or(""));
+		assertThat(list.key("  ").or("")).isEqualTo(nil.key("  ").or(""));
+		assertThat(list.at(0).or("")).isEqualTo(nil.at(0).or(""));
 	}
 
 	@Test
@@ -87,17 +87,18 @@ public class AnyTest {
 		});
 
 		assertThat(list.count()).isEqualTo(2);
-		assertThat(list.values()).extracting(Any::toString).containsExactly("1", "2");
+		assertThat(list.values()).extracting(x -> x.or("")).containsExactly("1", "2");
 		assertThat(list.keys()).isEmpty();
-		assertThat(list.toString()).isEqualTo("1");
+		assertThat(list.or("")).isEqualTo("1");
 		assertThat(list.or(false)).isFalse();
 		assertThat(list.or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("1"));
-		assertThat(list.at(-1).toString()).isEmpty();
-		assertThat(list.at(0).toString()).isEqualTo("1");
-		assertThat(list.at(1).toString()).isEqualTo("2");
-		assertThat(list.at(2).toString()).isEmpty();
-		assertThat(list.at(100).toString()).isEmpty();
-		assertThat(list.key("x").toString()).isEmpty();
+		Any any = list.at(-1);
+		assertThat(any.or("")).isEmpty();
+		assertThat(list.at(0).or("")).isEqualTo("1");
+		assertThat(list.at(1).or("")).isEqualTo("2");
+		assertThat(list.at(2).or("")).isEmpty();
+		assertThat(list.at(100).or("")).isEmpty();
+		assertThat(list.key("x").or("")).isEmpty();
 	}
 
 	@Test
@@ -107,13 +108,13 @@ public class AnyTest {
 		assertThat(map.count()).isEqualTo(nil.count());
 		assertThat(map.values()).containsExactlyElementsOf(nil.values());
 		assertThat(map.keys()).containsExactlyElementsOf(nil.keys());
-		assertThat(map.toString()).isEqualTo(nil.toString());
+		assertThat(map.or("")).isEqualTo(nil.or(""));
 		assertThat(map.or(false)).isEqualTo(nil.or(false));
 		assertThat(map.or(BigDecimal.ZERO)).isEqualTo(nil.or(BigDecimal.ZERO));
-		assertThat(map.key("x").toString()).isEqualTo(nil.key("x").toString());
-		assertThat(map.key(null).toString()).isEqualTo(nil.key(null).toString());
-		assertThat(map.key("  ").toString()).isEqualTo(nil.key("  ").toString());
-		assertThat(map.at(0).toString()).isEqualTo(nil.at(0).toString());
+		assertThat(map.key("x").or("")).isEqualTo(nil.key("x").or(""));
+		assertThat(map.key(null).or("")).isEqualTo(nil.key(null).or(""));
+		assertThat(map.key("  ").or("")).isEqualTo(nil.key("  ").or(""));
+		assertThat(map.at(0).or("")).isEqualTo(nil.at(0).or(""));
 	}
 
 	@Test
@@ -124,17 +125,17 @@ public class AnyTest {
 			x.put(" k3 ", Any.of("3"));
 		});
 		assertThat(map.count()).isEqualTo(3);
-		assertThat(map.values()).extracting(Any::toString).containsExactly("2", "1", "3");
+		assertThat(map.values()).extracting(x -> x.or("")).containsExactly("2", "1", "3");
 		assertThat(map.keys()).containsExactly("CAPITAL", "k1", "k3");
-		assertThat(map.toString()).isEmpty();
+		assertThat(map.or("")).isEmpty();
 		assertThat(map.or(false)).isFalse();
 		assertThat(map.or(BigDecimal.ZERO)).isEqualByComparingTo(BigDecimal.ZERO);
-		assertThat(map.key("x").toString()).isEmpty();
-		assertThat(map.key(null).toString()).isEmpty();
-		assertThat(map.key("  ").toString()).isEmpty();
-		assertThat(map.at(0).toString()).isEmpty();
-		assertThat(map.key("  k1  ").toString()).isEqualTo("1");
-		assertThat(map.key("  capital  ").toString()).isEqualTo("2");
+		assertThat(map.key("x").or("")).isEmpty();
+		assertThat(map.key(null).or("")).isEmpty();
+		assertThat(map.key("  ").or("")).isEmpty();
+		assertThat(map.at(0).or("")).isEmpty();
+		assertThat(map.key("  k1  ").or("")).isEqualTo("1");
+		assertThat(map.key("  capital  ").or("")).isEqualTo("2");
 	}
 
 	@Test
@@ -150,9 +151,9 @@ public class AnyTest {
 		assertThat(any.count()).isEqualTo(1);
 		assertThat(any.key("k").count()).isEqualTo(4);
 		assertThat(any.key("k").at(0).count()).isZero();
-		assertThat(any.key("k").at(1).toString()).isEqualTo("v1");
+		assertThat(any.key("k").at(1).or("")).isEqualTo("v1");
 		assertThat(any.key("k").at(2).count()).isZero();
-		assertThat(any.key("k").at(3).toString()).isEqualTo("v2");
+		assertThat(any.key("k").at(3).or("")).isEqualTo("v2");
 	}
 
 	@Test
@@ -168,7 +169,7 @@ public class AnyTest {
 		assertThat(any.count()).isEqualTo(3);
 		assertThat(any.at(0).count()).isZero();
 		assertThat(any.at(1).count()).isZero();
-		assertThat(any.at(2).toString()).isEqualTo("val");
+		assertThat(any.at(2).or("")).isEqualTo("val");
 	}
 
 	@Test
@@ -235,5 +236,21 @@ public class AnyTest {
 
 		assertThat(scalar.keyStream().collect(toList())).isEmpty();
 		assertThat(scalar.valueStream().map(x -> x.or(0)).collect(toList())).containsExactly(1);
+	}
+
+	@Test
+	public void should_return_string_debug_representation() {
+		assertThat(Any.NULL.toString()).isEqualTo("");
+		assertThat(Any.of("abc").toString()).isEqualTo("abc");
+		assertThat(Any.of(123).toString()).isEqualTo("123");
+		assertThat(Any.map(b -> {
+			b.put("a", Any.of("b"));
+			b.put("c", Any.of("d"));
+		}).toString()).isEqualTo("{a=b, c=d}");
+		assertThat(Any.list(b -> {
+			b.put(Any.of(""));
+			b.put(Any.of("b"));
+			b.put(Any.of("d"));
+		}).toString()).isEqualTo("[, b, d]");
 	}
 }

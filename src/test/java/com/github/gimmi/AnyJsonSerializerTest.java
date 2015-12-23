@@ -53,7 +53,7 @@ public class AnyJsonSerializerTest {
 		Any any = sut.fromJson(json);
 
 		assertThat(any.count()).isEqualTo(6);
-		assertThat(any.key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("strProp").or("")).isEqualTo("val");
 		assertThat(any.key("numProp").or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.key("trueProp").or(false)).isTrue();
 		assertThat(any.key("falseProp").or(false)).isFalse();
@@ -61,12 +61,12 @@ public class AnyJsonSerializerTest {
 		assertThat(any.key("aryProp").at(0).count()).isZero();
 		assertThat(any.key("aryProp").at(1).count()).isZero();
 		assertThat(any.key("aryProp").at(2).count()).isZero();
-		assertThat(any.key("aryProp").at(3).toString()).isEqualTo("val");
+		assertThat(any.key("aryProp").at(3).or("")).isEqualTo("val");
 		assertThat(any.key("aryProp").at(4).or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.key("aryProp").at(5).or(false)).isTrue();
 		assertThat(any.key("aryProp").at(6).or(false)).isFalse();
 		assertThat(any.key("objProp").count()).isEqualTo(4);
-		assertThat(any.key("objProp").key("strProp").toString()).isEqualTo("val");
+		assertThat(any.key("objProp").key("strProp").or("")).isEqualTo("val");
 		assertThat(any.key("objProp").key("numProp").or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
 		assertThat(any.key("objProp").key("trueProp").or(false)).isTrue();
 		assertThat(any.key("objProp").key("falseProp").or(false)).isFalse();
@@ -121,14 +121,14 @@ public class AnyJsonSerializerTest {
 
 	@Test
 	public void should_deserialize_special_chars() {
-		assertThat(sut.fromJson("\"-\\\"-\"").toString()).isEqualTo("-\"-");
-		assertThat(sut.fromJson("\"-\\/-\"").toString()).isEqualTo("-/-");
-		assertThat(sut.fromJson("\"-\\b-\"").toString()).isEqualTo("-\b-");
-		assertThat(sut.fromJson("\"-\\f-\"").toString()).isEqualTo("-\f-");
-		assertThat(sut.fromJson("\"-\\n-\"").toString()).isEqualTo("-\n-");
-		assertThat(sut.fromJson("\"-\\t-\"").toString()).isEqualTo("-\t-");
-		assertThat(sut.fromJson("\"-\\r-\"").toString()).isEqualTo("-\r-");
-		assertThat(sut.fromJson("\"-\\u0058-\"").toString()).isEqualTo("-X-");
+		assertThat(sut.fromJson("\"-\\\"-\"").or("")).isEqualTo("-\"-");
+		assertThat(sut.fromJson("\"-\\/-\"").or("")).isEqualTo("-/-");
+		assertThat(sut.fromJson("\"-\\b-\"").or("")).isEqualTo("-\b-");
+		assertThat(sut.fromJson("\"-\\f-\"").or("")).isEqualTo("-\f-");
+		assertThat(sut.fromJson("\"-\\n-\"").or("")).isEqualTo("-\n-");
+		assertThat(sut.fromJson("\"-\\t-\"").or("")).isEqualTo("-\t-");
+		assertThat(sut.fromJson("\"-\\r-\"").or("")).isEqualTo("-\r-");
+		assertThat(sut.fromJson("\"-\\u0058-\"").or("")).isEqualTo("-X-");
 	}
 
 	@Test
