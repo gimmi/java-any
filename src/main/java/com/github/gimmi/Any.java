@@ -125,19 +125,19 @@ public class Any {
 
 	@Override
 	public String toString() {
-		return val("");
+		return or("");
 	}
 
 	public Optional<String> val() {
 		return Optional.ofNullable(getScalar());
 	}
 
-	public String val(String def) {
+	public String or(String def) {
 		String val = getScalar();
 		return val == null ? def : val;
 	}
 
-	public BigDecimal val(BigDecimal def) {
+	public BigDecimal or(BigDecimal def) {
 		String v = getScalar();
 		if (v == null) {
 			return def;
@@ -145,7 +145,7 @@ public class Any {
 		return new BigDecimal(v);
 	}
 
-	public Integer val(Integer def) {
+	public Integer or(Integer def) {
 		String v = getScalar();
 		if (v == null) {
 			return def;
@@ -153,7 +153,7 @@ public class Any {
 		return Integer.parseInt(v);
 	}
 
-	public Boolean val(Boolean def) {
+	public Boolean or(Boolean def) {
 		String v = getScalar();
 		if (v == null) {
 			return def;
@@ -161,7 +161,7 @@ public class Any {
 		return Boolean.parseBoolean(v);
 	}
 
-	public LocalDate val(LocalDate def) {
+	public LocalDate or(LocalDate def) {
 		String v = getScalar();
 		if (v == null) {
 			return def;
@@ -169,7 +169,7 @@ public class Any {
 		return LocalDate.parse(v);
 	}
 
-	public LocalTime val(LocalTime def) {
+	public LocalTime or(LocalTime def) {
 		String v = getScalar();
 		if (v == null) {
 			return def;
@@ -177,7 +177,7 @@ public class Any {
 		return LocalTime.parse(v);
 	}
 
-	public LocalDateTime val(LocalDateTime def) {
+	public LocalDateTime or(LocalDateTime def) {
 		String v = getScalar();
 		if (v == null) {
 			return def;

@@ -45,9 +45,9 @@ public class AnyXmlSerializerTest {
 
 		assertThat(any.count()).isEqualTo(6);
 		assertThat(any.key("strProp").toString()).isEqualTo("val");
-		assertThat(any.key("numProp").val(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
-		assertThat((boolean) any.key("trueProp").val(false)).isTrue();
-		assertThat((boolean) any.key("falseProp").val(false)).isFalse();
+		assertThat(any.key("numProp").or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+		assertThat((boolean) any.key("trueProp").or(false)).isTrue();
+		assertThat((boolean) any.key("falseProp").or(false)).isFalse();
 		assertThat(any.key("aryProp").count()).isEqualTo(5);
 		assertThat(any.key("aryProp").at(0).toString()).isEmpty();
 		assertThat(any.key("aryProp").at(1).toString()).isEqualTo("val");
