@@ -1,4 +1,4 @@
-package com.github.gimmi;
+package com.github.gimmi.any;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,7 +11,7 @@ import java.util.TreeMap;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static com.github.gimmi.Utils.stripToNull;
+import static com.github.gimmi.any.Utils.stripToNull;
 
 public class Any {
 	public static final Any NULL = new Any(null, null, null);

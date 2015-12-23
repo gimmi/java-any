@@ -1,9 +1,9 @@
-package com.github.gimmi;
+package com.github.gimmi.any;
 
 import java.io.*;
 import java.util.Iterator;
 
-import static com.github.gimmi.Utils.stripToEmpty;
+import static com.github.gimmi.any.Utils.stripToEmpty;
 
 public class AnyJsonSerializer {
 	public Any fromJson(String str) {

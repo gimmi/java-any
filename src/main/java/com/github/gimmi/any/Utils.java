@@ -1,4 +1,4 @@
-package com.github.gimmi;
+package com.github.gimmi.any;
 
 class Utils {
 	private static final int INDEX_NOT_FOUND = -1;

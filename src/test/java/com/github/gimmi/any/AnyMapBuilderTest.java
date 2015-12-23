@@ -1,4 +1,4 @@
-package com.github.gimmi;
+package com.github.gimmi.any;
 
 import org.junit.Test;
 
