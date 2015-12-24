@@ -17,6 +17,21 @@ public class AnyXmlSerializerTest {
    }
 
    @Test
+   public void should_keep_root_element_with_attributes() {
+      Any any = sut.fromXml("<Root attr='v1'><Elem>v2</Elem></Root>");
+
+      assertThat(any.count()).isEqualTo(1);
+      assertThat(any.key("Root").count()).isEqualTo(2);
+      assertThat(any.key("Root").key("attr").or("")).isEqualTo("v1");
+      assertThat(any.key("Root").key("Elem").or("")).isEqualTo("v2");
+   }
+
+   @Test
+   public void empty_root_element_deserialize_to_null() {
+      assertThat(sut.fromXml("<Root />").count()).isEqualTo(0);
+   }
+
+   @Test
    public void should_deserialize_xml() {
       String xml = String.join("",
             "<Root>",
@@ -43,23 +58,24 @@ public class AnyXmlSerializerTest {
 
       Any any = sut.fromXml(xml);
 
-      assertThat(any.count()).isEqualTo(6);
-      assertThat(any.key("strProp").or("")).isEqualTo("val");
-      assertThat(any.key("numProp").or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
-      assertThat((boolean) any.key("trueProp").or(false)).isTrue();
-      assertThat((boolean) any.key("falseProp").or(false)).isFalse();
-      assertThat(any.key("aryProp").count()).isEqualTo(5);
-      assertThat(any.key("aryProp").at(0).or("")).isEmpty();
-      assertThat(any.key("aryProp").at(1).or("")).isEqualTo("val");
-      assertThat(any.key("aryProp").at(2).or("")).isEqualTo("-3.14e2");
-      assertThat(any.key("aryProp").at(3).or("")).isEqualTo("true");
-      assertThat(any.key("aryProp").at(4).or("")).isEqualTo("false");
-      assertThat(any.key("objProp").count()).isEqualTo(4);
-      assertThat(any.key("objProp").keys()).containsOnly("StrProp", "NumProp", "TrueProp", "FalseProp");
-      assertThat(any.key("objProp").key("strProp").or("")).isEqualTo("val");
-      assertThat(any.key("objProp").key("numProp").or("")).isEqualTo("-3.14e2");
-      assertThat(any.key("objProp").key("trueProp").or("")).isEqualTo("true");
-      assertThat(any.key("objProp").key("falseProp").or("")).isEqualTo("false");
+      assertThat(any.count()).isEqualTo(1);
+      assertThat(any.key("Root").count()).isEqualTo(6);
+      assertThat(any.key("Root").key("strProp").or("")).isEqualTo("val");
+      assertThat(any.key("Root").key("numProp").or(BigDecimal.ZERO)).isEqualByComparingTo(new BigDecimal("-314"));
+      assertThat(any.key("Root").key("trueProp").or(false)).isTrue();
+      assertThat(any.key("Root").key("falseProp").or(false)).isFalse();
+      assertThat(any.key("Root").key("aryProp").count()).isEqualTo(5);
+      assertThat(any.key("Root").key("aryProp").at(0).or("")).isEmpty();
+      assertThat(any.key("Root").key("aryProp").at(1).or("")).isEqualTo("val");
+      assertThat(any.key("Root").key("aryProp").at(2).or("")).isEqualTo("-3.14e2");
+      assertThat(any.key("Root").key("aryProp").at(3).or("")).isEqualTo("true");
+      assertThat(any.key("Root").key("aryProp").at(4).or("")).isEqualTo("false");
+      assertThat(any.key("Root").key("objProp").count()).isEqualTo(4);
+      assertThat(any.key("Root").key("objProp").keys()).containsOnly("StrProp", "NumProp", "TrueProp", "FalseProp");
+      assertThat(any.key("Root").key("objProp").key("strProp").or("")).isEqualTo("val");
+      assertThat(any.key("Root").key("objProp").key("numProp").or("")).isEqualTo("-3.14e2");
+      assertThat(any.key("Root").key("objProp").key("trueProp").or("")).isEqualTo("true");
+      assertThat(any.key("Root").key("objProp").key("falseProp").or("")).isEqualTo("false");
    }
 
    @Test
@@ -75,8 +91,8 @@ public class AnyXmlSerializerTest {
 
       Any any = sut.fromXml(xml);
 
-      assertThat(any.keys()).containsOnly("StrProp", "ObjProp");
-      assertThat(any.count()).isEqualTo(2);
+      assertThat(any.key("Root").keys()).containsOnly("StrProp", "ObjProp");
+      assertThat(any.key("Root").count()).isEqualTo(2);
    }
 
    @Test
@@ -87,9 +103,9 @@ public class AnyXmlSerializerTest {
 
       Any any = sut.fromXml(xml);
 
-      assertThat(any.keys()).containsOnly("attr1", "attr2", "text");
-      assertThat(any.key("attr1").or("")).isEqualTo("val1");
-      assertThat(any.key("attr2").or("")).isEqualTo("val2");
-      assertThat(any.key("text").or("")).isEqualTo("val3");
+      assertThat(any.key("Root").keys()).containsOnly("attr1", "attr2", "text");
+      assertThat(any.key("Root").key("attr1").or("")).isEqualTo("val1");
+      assertThat(any.key("Root").key("attr2").or("")).isEqualTo("val2");
+      assertThat(any.key("Root").key("text").or("")).isEqualTo("val3");
    }
 }

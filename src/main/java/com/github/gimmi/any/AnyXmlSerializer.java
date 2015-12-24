@@ -26,7 +26,7 @@ public class AnyXmlSerializer {
          SAXParser saxParser = factory.newSAXParser();
          Handler handler = new Handler();
          saxParser.parse(new InputSource(reader), handler);
-         return handler.any;
+         return handler.elements.pop().build();
       } catch (IOException e) {
          throw new UncheckedIOException(e);
       } catch (ParserConfigurationException | SAXException e) {
@@ -35,9 +35,13 @@ public class AnyXmlSerializer {
    }
 
    private static class Handler extends DefaultHandler {
-      private final Stack<AnyMapBuilder> elements = new Stack<>();
+      private final Stack<AnyMapBuilder> elements;
       private final StringBuilder sb = new StringBuilder();
-      private Any any;
+
+      public Handler() {
+         elements = new Stack<>();
+         elements.push(new AnyMapBuilder());
+      }
 
       @Override
       public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
@@ -56,15 +60,13 @@ public class AnyXmlSerializer {
       @Override
       public void endElement(String uri, String localName, String qName) throws SAXException {
          AnyMapBuilder builder = elements.pop();
-         any = Any.of(sb.toString());
+         Any any = Any.of(sb.toString());
          sb.setLength(0);
          if (builder.count() > 0) {
             any = builder.put("text", any).build();
          }
 
-         if (!elements.empty()) {
-            elements.peek().put(localName, any);
-         }
+         elements.peek().put(localName, any);
       }
    }
 }
