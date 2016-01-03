@@ -229,7 +229,7 @@ public class Any {
    }
 
    private String getScalar() {
-      if (list != null && list.size() > 0) {
+      if (list != null) {
          return list.get(0).scalar;
       }
       return scalar;
