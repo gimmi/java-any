@@ -25,7 +25,7 @@ public class AnyJsonSerializer {
                String key = parseString(reader);
                eatWhitespaces(reader);
                readExpected(reader, ":");
-               mapb.put(key, fromJson(reader));
+               mapb.append(key, fromJson(reader));
                eatWhitespaces(reader);
                if (peekOrFail(reader) == ',') {
                   reader.read();
@@ -39,7 +39,7 @@ public class AnyJsonSerializer {
             AnyListBuilder listb = new AnyListBuilder();
             eatWhitespaces(reader);
             while (peekOrFail(reader) != ']') {
-               listb.put(fromJson(reader));
+               listb.append(fromJson(reader));
                eatWhitespaces(reader);
                if (peekOrFail(reader) == ',') {
                   reader.read();

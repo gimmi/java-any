@@ -23,9 +23,9 @@ public class AnyTest {
    @Test
    public void should_handle_bigdecimal_scalar() {
       assertThat(Any.of(BigDecimal.valueOf(0)).or(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(0));
-      Any any1 = Any.map(x -> x.put("key", Any.of("3.14")));
+      Any any1 = Any.map(x -> x.append("key", Any.of("3.14")));
       assertThat(any1.or(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
-      Any any = Any.list(x -> x.put(Any.of("3.14")));
+      Any any = Any.list(x -> x.append(Any.of("3.14")));
       assertThat(any.or(BigDecimal.ZERO)).isEqualTo(new BigDecimal("3.14"));
       assertThat(Any.of(BigDecimal.valueOf(314, 2)).or(BigDecimal.ZERO)).isEqualTo(BigDecimal.valueOf(314, 2));
       assertThat(Any.of((BigDecimal) null).or(BigDecimal.ZERO)).isEqualTo(BigDecimal.ZERO);
@@ -35,9 +35,9 @@ public class AnyTest {
    @Test
    public void should_handle_integer_scalar() {
       assertThat(Any.of(0).or(-1)).isZero();
-      Any map = Any.map(x -> x.put("key", Any.of("314")));
+      Any map = Any.map(x -> x.append("key", Any.of("314")));
       assertThat(map.or(-1)).isEqualTo(-1);
-      Any list = Any.list(x -> x.put(Any.of("314")));
+      Any list = Any.list(x -> x.append(Any.of("314")));
       assertThat(list.or(0)).isEqualTo(314);
       assertThat(Any.of((Integer) null).or(-1)).isEqualTo(-1);
       assertThat(Any.of("   ").or(-1)).isEqualTo(-1);
@@ -82,8 +82,8 @@ public class AnyTest {
    @Test
    public void should_handle_lists_containing_values() {
       Any list = Any.list(l -> {
-         l.put(Any.of("1"));
-         l.put(Any.of("2"));
+         l.append(Any.of("1"));
+         l.append(Any.of("2"));
       });
 
       assertThat(list.count()).isEqualTo(2);
@@ -120,9 +120,9 @@ public class AnyTest {
    @Test
    public void should_handle_map_containing_values() {
       Any map = Any.map(x -> {
-         x.put("k1", Any.of("1"));
-         x.put("CAPITAL", Any.of("2"));
-         x.put(" k3 ", Any.of("3"));
+         x.append("k1", Any.of("1"));
+         x.append("CAPITAL", Any.of("2"));
+         x.append(" k3 ", Any.of("3"));
       });
       assertThat(map.count()).isEqualTo(3);
       assertThat(map.values()).extracting(x -> x.or("")).containsExactly("2", "1", "3");
@@ -141,11 +141,11 @@ public class AnyTest {
    @Test
    public void should_collect_all_values_for_the_same_key() {
       Any any = Any.map(b -> {
-         b.put("k", Any.NULL);
-         b.put("k", Any.of("v1"));
-         b.put("k", Any.NULL);
-         b.put("k", Any.of("v2"));
-         b.put("k", Any.NULL);
+         b.append("k", Any.NULL);
+         b.append("k", Any.of("v1"));
+         b.append("k", Any.NULL);
+         b.append("k", Any.of("v2"));
+         b.append("k", Any.NULL);
       });
 
       assertThat(any.count()).isEqualTo(1);
@@ -159,11 +159,11 @@ public class AnyTest {
    @Test
    public void should_skip_trailing_nulls_from_list() {
       Any any = Any.list(b -> {
-         b.put(Any.NULL);
-         b.put(Any.NULL);
-         b.put(Any.of("val"));
-         b.put(Any.NULL);
-         b.put(Any.NULL);
+         b.append(Any.NULL);
+         b.append(Any.NULL);
+         b.append(Any.of("val"));
+         b.append(Any.NULL);
+         b.append(Any.NULL);
       });
 
       assertThat(any.count()).isEqualTo(3);
@@ -202,7 +202,7 @@ public class AnyTest {
    @Test
    public void should_treat_scalar_like_single_value_list() {
       Any scalar = Any.of("hello");
-      Any list = Any.list(b -> b.put(scalar));
+      Any list = Any.list(b -> b.append(scalar));
       assertThat(scalar.count()).isEqualTo(list.count());
       assertThat(scalar.keys()).containsExactlyElementsOf(list.keys());
       assertThat(scalar.values()).containsExactlyElementsOf(list.values());
@@ -215,18 +215,18 @@ public class AnyTest {
    @Test
    public void should_iterate_using_stream() {
       Any map = Any.map(b -> {
-         b.put("a", Any.of(1));
-         b.put("b", Any.of(2));
-         b.put("c", Any.of(3));
+         b.append("a", Any.of(1));
+         b.append("b", Any.of(2));
+         b.append("c", Any.of(3));
       });
 
       assertThat(map.keyStream().collect(toList())).containsExactly("a", "b", "c");
       assertThat(map.valueStream().map(x -> x.or(0)).collect(toList())).containsExactly(1, 2, 3);
 
       Any list = Any.list(b -> {
-         b.put(Any.of(1));
-         b.put(Any.of(2));
-         b.put(Any.of(3));
+         b.append(Any.of(1));
+         b.append(Any.of(2));
+         b.append(Any.of(3));
       });
 
       assertThat(list.keyStream().collect(toList())).isEmpty();
@@ -244,13 +244,13 @@ public class AnyTest {
       assertThat(Any.of("abc").toString()).isEqualTo("abc");
       assertThat(Any.of(123).toString()).isEqualTo("123");
       assertThat(Any.map(b -> {
-         b.put("a", Any.of("b"));
-         b.put("c", Any.of("d"));
+         b.append("a", Any.of("b"));
+         b.append("c", Any.of("d"));
       }).toString()).isEqualTo("{a=b, c=d}");
       assertThat(Any.list(b -> {
-         b.put(Any.of(""));
-         b.put(Any.of("b"));
-         b.put(Any.of("d"));
+         b.append(Any.of(""));
+         b.append(Any.of("b"));
+         b.append(Any.of("d"));
       }).toString()).isEqualTo("[, b, d]");
    }
 }

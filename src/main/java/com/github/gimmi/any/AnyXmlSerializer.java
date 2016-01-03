@@ -47,7 +47,7 @@ public class AnyXmlSerializer {
       public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
          AnyMapBuilder builder = new AnyMapBuilder();
          for (int i = 0; i < attributes.getLength(); i++) {
-            builder.put(attributes.getLocalName(i), Any.of(attributes.getValue(i)));
+            builder.append(attributes.getLocalName(i), Any.of(attributes.getValue(i)));
          }
          elements.push(builder);
       }
@@ -63,10 +63,10 @@ public class AnyXmlSerializer {
          Any any = Any.of(sb.toString());
          sb.setLength(0);
          if (builder.count() > 0) {
-            any = builder.put("text", any).build();
+            any = builder.append("text", any).build();
          }
 
-         elements.peek().put(localName, any);
+         elements.peek().append(localName, any);
       }
    }
 }

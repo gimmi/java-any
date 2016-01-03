@@ -6,8 +6,7 @@ public class AnyListBuilder {
    private final ArrayList<Any> list = new ArrayList<>();
    private int lastNonNullIndex = -1;
 
-
-   public AnyListBuilder put(Any value) {
+   public AnyListBuilder append(Any value) {
       if (value == null) {
          value = Any.NULL;
       }

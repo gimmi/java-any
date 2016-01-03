@@ -8,10 +8,10 @@ import static com.github.gimmi.any.Utils.stripToEmpty;
 public class AnyMapBuilder {
    private final TreeMap<String, AnyListBuilder> map = new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
 
-   public AnyMapBuilder put(String key, Any value) {
+   public AnyMapBuilder append(String key, Any value) {
       key = stripToEmpty(key);
       if (key != null) {
-         map.computeIfAbsent(key, k -> new AnyListBuilder()).put(value);
+         map.computeIfAbsent(key, k -> new AnyListBuilder()).append(value);
       }
       return this;
    }

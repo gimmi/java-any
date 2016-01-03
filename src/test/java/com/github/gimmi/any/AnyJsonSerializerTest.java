@@ -75,33 +75,33 @@ public class AnyJsonSerializerTest {
    @Test
    public void should_serialize_complex_obj() {
       String json = sut.toJson(Any.map(b -> {
-         b.put("strProp", Any.of("val"));
-         b.put("numProp", Any.of(new BigDecimal("-3.14e2")));
-         b.put("trueProp", Any.of(true));
-         b.put("falseProp", Any.of(false));
-         b.put("nullProp", Any.NULL);
-         b.put("emptyAry", Any.list(bb -> {}));
-         b.put("emptyObj", Any.map(bb -> {}));
-         b.put("aryProp", Any.list(bb -> {
-            bb.put(Any.NULL);
-            bb.put(Any.list(bbb -> {}));
-            bb.put(Any.map(bbb -> {}));
-            bb.put(Any.of("val"));
-            bb.put(Any.of(new BigDecimal("-3.14e2")));
-            bb.put(Any.of(true));
-            bb.put(Any.of(false));
-            bb.put(Any.NULL);
-            bb.put(Any.list(bbb -> {}));
-            bb.put(Any.map(bbb -> {}));
+         b.append("strProp", Any.of("val"));
+         b.append("numProp", Any.of(new BigDecimal("-3.14e2")));
+         b.append("trueProp", Any.of(true));
+         b.append("falseProp", Any.of(false));
+         b.append("nullProp", Any.NULL);
+         b.append("emptyAry", Any.list(bb -> {}));
+         b.append("emptyObj", Any.map(bb -> {}));
+         b.append("aryProp", Any.list(bb -> {
+            bb.append(Any.NULL);
+            bb.append(Any.list(bbb -> {}));
+            bb.append(Any.map(bbb -> {}));
+            bb.append(Any.of("val"));
+            bb.append(Any.of(new BigDecimal("-3.14e2")));
+            bb.append(Any.of(true));
+            bb.append(Any.of(false));
+            bb.append(Any.NULL);
+            bb.append(Any.list(bbb -> {}));
+            bb.append(Any.map(bbb -> {}));
          }));
-         b.put("objProp", Any.map(bb -> {
-            bb.put("strProp", Any.of("val"));
-            bb.put("numProp", Any.of(new BigDecimal("-3.14e2")));
-            bb.put("trueProp", Any.of(true));
-            bb.put("falseProp", Any.of(false));
-            bb.put("nullProp", Any.NULL);
-            bb.put("emptyAry", Any.list(bbb -> {}));
-            bb.put("emptyObj", Any.map(bbb -> {}));
+         b.append("objProp", Any.map(bb -> {
+            bb.append("strProp", Any.of("val"));
+            bb.append("numProp", Any.of(new BigDecimal("-3.14e2")));
+            bb.append("trueProp", Any.of(true));
+            bb.append("falseProp", Any.of(false));
+            bb.append("nullProp", Any.NULL);
+            bb.append("emptyAry", Any.list(bbb -> {}));
+            bb.append("emptyObj", Any.map(bbb -> {}));
          }));
       })).replace('"', '\'');
 
@@ -136,8 +136,8 @@ public class AnyJsonSerializerTest {
       assertThat(sut.toJson(Any.NULL)).isEqualTo("\"\"");
 
       assertThat(sut.toJson(Any.list(b -> {
-         b.put(Any.NULL);
-         b.put(Any.of("abc"));
+         b.append(Any.NULL);
+         b.append(Any.of("abc"));
       }))).isEqualTo("[\"\",\"abc\"]");
    }
 }

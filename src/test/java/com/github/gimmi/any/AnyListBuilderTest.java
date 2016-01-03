@@ -10,16 +10,16 @@ public class AnyListBuilderTest {
       AnyListBuilder b = new AnyListBuilder();
       assertThat(b.count()).isZero();
       assertThat(b.build().count()).isZero();
-      b.put(Any.NULL);
+      b.append(Any.NULL);
       assertThat(b.count()).isZero();
       assertThat(b.build().count()).isZero();
-      b.put(Any.NULL);
+      b.append(Any.NULL);
       assertThat(b.count()).isZero();
       assertThat(b.build().count()).isZero();
-      b.put(Any.of("val"));
+      b.append(Any.of("val"));
       assertThat(b.count()).isEqualTo(3);
       assertThat(b.build().count()).isEqualTo(3);
-      b.put(Any.NULL);
+      b.append(Any.NULL);
       assertThat(b.count()).isEqualTo(3);
       assertThat(b.build().count()).isEqualTo(3);
    }

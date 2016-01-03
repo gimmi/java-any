@@ -10,16 +10,16 @@ public class AnyMapBuilderTest {
       AnyMapBuilder b = new AnyMapBuilder();
       assertThat(b.count()).isZero();
       assertThat(b.build().count()).isZero();
-      b.put("k1", Any.NULL);
+      b.append("k1", Any.NULL);
       assertThat(b.count()).isZero();
       assertThat(b.build().count()).isZero();
-      b.put("k1", Any.of("val1"));
+      b.append("k1", Any.of("val1"));
       assertThat(b.count()).isEqualTo(1);
       assertThat(b.build().count()).isEqualTo(1);
-      b.put("K1", Any.of("val2"));
+      b.append("K1", Any.of("val2"));
       assertThat(b.count()).isEqualTo(1);
       assertThat(b.build().count()).isEqualTo(1);
-      b.put("k2", Any.of("val3"));
+      b.append("k2", Any.of("val3"));
       assertThat(b.count()).isEqualTo(2);
       assertThat(b.build().count()).isEqualTo(2);
    }
