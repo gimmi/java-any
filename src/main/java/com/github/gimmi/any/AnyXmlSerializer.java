@@ -8,10 +8,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.UncheckedIOException;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+import java.io.*;
 import java.util.Stack;
 
 public class AnyXmlSerializer {
@@ -31,6 +31,42 @@ public class AnyXmlSerializer {
          throw new UncheckedIOException(e);
       } catch (ParserConfigurationException | SAXException e) {
          throw new RuntimeException("Error parsing XML", e);
+      }
+   }
+
+   public String toXml(String root, Any any) {
+      StringWriter writer = new StringWriter();
+      toXml(root, any, writer);
+      return writer.toString();
+   }
+
+   public void toXml(String root, Any any, Writer writer) {
+      try {
+         XMLOutputFactory xof = XMLOutputFactory.newInstance();
+         XMLStreamWriter xml = xof.createXMLStreamWriter(writer);
+         write(root, any, xml);
+         xml.flush();
+         xml.close();
+      } catch (XMLStreamException e) {
+         throw new RuntimeException(e);
+      }
+   }
+
+   private void write(String currentKey, Any current, XMLStreamWriter xml) throws XMLStreamException {
+      if (current.keyStream().count() > 0) {
+         xml.writeStartElement(currentKey);
+         for (String innerKey : current.keys()) {
+            write(innerKey, current.key(innerKey), xml);
+         }
+         xml.writeEndElement();
+      } else if (current.count() > 1) {
+         for (Any inner : current.values()) {
+            write(currentKey, inner, xml);
+         }
+      } else {
+         xml.writeStartElement(currentKey);
+         xml.writeCharacters(current.or(""));
+         xml.writeEndElement();
       }
    }
 

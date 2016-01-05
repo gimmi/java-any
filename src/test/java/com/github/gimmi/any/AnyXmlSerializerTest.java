@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -107,5 +108,51 @@ public class AnyXmlSerializerTest {
       assertThat(any.key("Root").key("attr1").or("")).isEqualTo("val1");
       assertThat(any.key("Root").key("attr2").or("")).isEqualTo("val2");
       assertThat(any.key("Root").key("text").or("")).isEqualTo("val3");
+   }
+
+   @Test
+   public void should_write_empty_xml() {
+      assertThat(sut.toXml("root", Any.NULL)).isEqualTo("<root></root>");
+   }
+
+   @Test
+   public void should_write_xml_with_scalar_value() {
+      assertThat(sut.toXml("root", Any.of("text"))).isEqualTo("<root>text</root>");
+      assertThat(sut.toXml("root", Any.of("<html>fragment</html>"))).isEqualTo("<root>&lt;html&gt;fragment&lt;/html&gt;</root>");
+      assertThat(sut.toXml("root", Any.of(123))).isEqualTo("<root>123</root>");
+      assertThat(sut.toXml("root", Any.of(LocalDateTime.of(2016, 1, 5, 20, 30)))).isEqualTo("<root>2016-01-05T20:30</root>");
+   }
+
+   @Test
+   public void should_flatten_nested_lists() {
+      assertThat(sut.toXml("root", Any.list(b -> {
+         b.append(Any.NULL);
+         b.append(Any.of("v21"));
+         b.append(Any.of("v22"));
+         b.append(Any.list(bb -> {
+            bb.append(Any.of("v23"));
+            bb.append(Any.of("v24"));
+         }));
+         b.append(Any.NULL);
+         b.append(Any.list(bb -> {
+            bb.append(Any.of("v25"));
+            bb.append(Any.of("v26"));
+         }));
+      }))).isEqualTo("<root></root><root>v21</root><root>v22</root><root>v23</root><root>v24</root><root></root><root>v25</root><root>v26</root>");
+   }
+
+   @Test
+   public void should_serialize_nested_maps() {
+      assertThat(sut.toXml("root", Any.map(b -> {
+         b.append("k1", Any.of("v1"));
+         b.append("k2", Any.list(bbb -> {
+            bbb.append(Any.of("v21"));
+            bbb.append(Any.of("v22"));
+         }));
+         b.append("k3", Any.map(bbb -> {
+            bbb.append("k31", Any.of("v31"));
+            bbb.append("k32", Any.of("v32"));
+         }));
+      }))).isEqualTo("<root><k1>v1</k1><k2>v21</k2><k2>v22</k2><k3><k31>v31</k31><k32>v32</k32></k3></root>");
    }
 }
