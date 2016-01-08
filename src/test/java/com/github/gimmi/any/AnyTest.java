@@ -57,10 +57,10 @@ public class AnyTest {
 
    @Test
    public void should_return_optional_when_no_default_specified() {
-      assertThat(Any.of("abc").val().isPresent()).isTrue();
-      assertThat(Any.of("abc").val().get()).isEqualTo("abc");
-      assertThat(Any.of((String) null).val().isPresent()).isFalse();
-      assertThat(Any.of("  ").val().isPresent()).isFalse();
+      assertThat(Any.of("abc").opt().isPresent()).isTrue();
+      assertThat(Any.of("abc").opt().get()).isEqualTo("abc");
+      assertThat(Any.of((String) null).opt().isPresent()).isFalse();
+      assertThat(Any.of("  ").opt().isPresent()).isFalse();
    }
 
    @Test

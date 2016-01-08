@@ -99,6 +99,13 @@ public class Any {
       return 0;
    }
 
+   public int keyCount() {
+      if (map != null) {
+         return map.size();
+      }
+      return 0;
+   }
+
    public Any key(String key) {
       key = stripToNull(key);
       if (key == null) {
@@ -123,7 +130,7 @@ public class Any {
       return Any.NULL;
    }
 
-   public Optional<String> val() {
+   public Optional<String> opt() {
       return Optional.ofNullable(getScalar());
    }
 

@@ -53,7 +53,7 @@ public class AnyXmlSerializer {
    }
 
    private void write(String currentKey, Any current, XMLStreamWriter xml) throws XMLStreamException {
-      if (current.keyStream().count() > 0) {
+      if (current.keyCount() > 0) {
          xml.writeStartElement(currentKey);
          for (String innerKey : current.keys()) {
             write(innerKey, current.key(innerKey), xml);
