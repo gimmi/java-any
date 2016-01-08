@@ -203,13 +203,27 @@ public class AnyTest {
    public void should_treat_scalar_like_single_value_list() {
       Any scalar = Any.of("hello");
       Any list = Any.list(b -> b.append(scalar));
-      assertThat(scalar.count()).isEqualTo(list.count());
-      assertThat(scalar.keys()).containsExactlyElementsOf(list.keys());
-      assertThat(scalar.values()).containsExactlyElementsOf(list.values());
-      assertThat(scalar.at(0)).isSameAs(list.at(0));
-      assertThat(scalar.at(1)).isSameAs(list.at(1));
-      assertThat(scalar.key("0")).isSameAs(list.key("0"));
-      assertThat(scalar.key("other")).isSameAs(list.key("other"));
+
+      assertThat(scalar.count()).isEqualTo(1);
+      assertThat(list.count()).isEqualTo(1);
+
+      assertThat(scalar.keys()).isEmpty();
+      assertThat(list.keys()).isEmpty();
+
+      assertThat(scalar.valueStream().map(x -> x.or("")).toArray()).containsExactly("hello");
+      assertThat(list.valueStream().map(x -> x.or("")).toArray()).containsExactly("hello");
+
+      assertThat(scalar.at(0).or("")).isEqualTo("hello");
+      assertThat(list.at(0).or("")).isEqualTo("hello");
+
+      assertThat(scalar.at(1).or("")).isEmpty();
+      assertThat(list.at(1).or("")).isEmpty();
+
+      assertThat(scalar.key("0").or("")).isEmpty();
+      assertThat(list.key("0").or("")).isEmpty();
+
+      assertThat(scalar.key("other").or("")).isEmpty();
+      assertThat(list.key("other").or("")).isEmpty();
    }
 
    @Test

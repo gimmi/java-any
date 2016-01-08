@@ -126,6 +126,8 @@ public class Any {
          if (index >= 0 && index < list.size()) {
             return list.get(index);
          }
+      } else if (scalar != null && index == 0) {
+         return this;
       }
       return Any.NULL;
    }
